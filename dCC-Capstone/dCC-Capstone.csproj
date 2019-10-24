@@ -178,16 +178,26 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201910241357226_initial.cs" />
+    <Compile Include="Migrations\201910241357226_initial.Designer.cs">
+      <DependentUpon>201910241357226_initial.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\Album.cs" />
     <Compile Include="Models\Artist.cs" />
+    <Compile Include="Models\GenreArtist.cs" />
+    <Compile Include="Models\ListenerArtist.cs" />
     <Compile Include="Models\Genre.cs" />
+    <Compile Include="Models\ListenerGenre.cs" />
     <Compile Include="Models\IdentityModels.cs" />
     <Compile Include="Models\ManageViewModels.cs" />
-    <Compile Include="Models\MusicEnthusiast.cs" />
+    <Compile Include="Models\Listener.cs" />
+    <Compile Include="Models\Mood.cs" />
     <Compile Include="Models\Playlist.cs" />
     <Compile Include="Models\Track.cs" />
+    <Compile Include="Models\GenreTrack.cs" />
+    <Compile Include="Models\ListenerTrack.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SpotifyAudioFeaturesJsonResponse.cs" />
     <Compile Include="SpotifyRelatedArtistsJsonResponse.cs" />
@@ -301,6 +311,11 @@
   </ItemGroup>
   <ItemGroup>
     <TypeScriptCompile Include="Scripts\index.d.ts" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Migrations\201910241357226_initial.resx">
+      <DependentUpon>201910241357226_initial.cs</DependentUpon>
+    </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

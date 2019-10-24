@@ -10,8 +10,8 @@ namespace dCC_Capstone.Models
     {
         [Key]
         public int AlbumId { get; set; }
-        public IList<Track> AlbumTracks { get; set; }
+        public string AlbumSpotifyId { get; set; }
+        public virtual IList<Track> AlbumTracks { get; set; }
         public Artist AlbumArtist { get; set; }
-        public IList<Genre> AlbumGenres { get; set; }
     }
 }

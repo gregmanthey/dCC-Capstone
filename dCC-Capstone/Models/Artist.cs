@@ -12,6 +12,8 @@ namespace dCC_Capstone.Models
         public int ArtistId { get; set; }
         public string ArtistSpotifyId { get; set; }
         public string ArtistName { get; set; }
-        public IList<Genre> ArtistGenres { get; set; }
+        //public virtual IList<Genre> ArtistGenres { get; set; }
+        //public virtual IList<Listener> Fans { get; set; }
+
     }
 }
