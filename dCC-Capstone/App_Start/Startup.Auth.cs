@@ -6,6 +6,7 @@ using Microsoft.Owin.Security.Cookies;
 using Microsoft.Owin.Security.Google;
 using Owin;
 using dCC_Capstone.Models;
+using Owin.Security.Providers.Spotify
 
 namespace dCC_Capstone
 {
@@ -36,6 +37,8 @@ namespace dCC_Capstone
                 }
             });            
             app.UseExternalSignInCookie(DefaultAuthenticationTypes.ExternalCookie);
+
+            app.UseSpotifyAuthentication(Keys.SpotifyClientId, Keys.SpotifyClientSecret);
 
             // Enables the application to temporarily store user information when they are verifying the second factor in the two-factor authentication process.
             app.UseTwoFactorSignInCookie(DefaultAuthenticationTypes.TwoFactorCookie, TimeSpan.FromMinutes(5));
