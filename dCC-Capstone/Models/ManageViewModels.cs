@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations;
 using Microsoft.AspNet.Identity;
 using Microsoft.Owin.Security;
 
-namespace dCC_Capstone.Models
+namespace Capstone.Models
 {
     public class IndexViewModel
     {

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 
-namespace dCC_Capstone
+namespace Capstone
 {
     public class SpotifyRelatedArtistsJsonResponse
     {

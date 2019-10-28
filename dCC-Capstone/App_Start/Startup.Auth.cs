@@ -5,10 +5,10 @@ using Microsoft.Owin;
 using Microsoft.Owin.Security.Cookies;
 using Microsoft.Owin.Security.Google;
 using Owin;
-using dCC_Capstone.Models;
-using Owin.Security.Providers.Spotify
+using Capstone.Models;
+using Owin.Security.Providers.Spotify;
 
-namespace dCC_Capstone
+namespace Capstone
 {
     public partial class Startup
     {
@@ -35,10 +35,8 @@ namespace dCC_Capstone
                         validateInterval: TimeSpan.FromMinutes(30),
                         regenerateIdentity: (manager, user) => user.GenerateUserIdentityAsync(manager))
                 }
-            });            
+            });
             app.UseExternalSignInCookie(DefaultAuthenticationTypes.ExternalCookie);
-
-            app.UseSpotifyAuthentication(Keys.SpotifyClientId, Keys.SpotifyClientSecret);
 
             // Enables the application to temporarily store user information when they are verifying the second factor in the two-factor authentication process.
             app.UseTwoFactorSignInCookie(DefaultAuthenticationTypes.TwoFactorCookie, TimeSpan.FromMinutes(5));
@@ -66,6 +64,17 @@ namespace dCC_Capstone
             //    ClientId = "",
             //    ClientSecret = ""
             //});
+
+            //SpotifyAuthenticationOptions options = new SpotifyAuthenticationOptions()
+            //{
+            //    ClientId = Keys.SpotifyClientId,
+            //    ClientSecret = Keys.SpotifyClientSecret,
+            //    CallbackPath = new PathString("/Home/SpotifyAuthorizeResponse")
+            //};
+            //options.Scope.Add("playlist-modify-private");
+            //options.Scope.Add("user-read-private");
+            //app.UseSpotifyAuthentication(options);
+
         }
     }
 }

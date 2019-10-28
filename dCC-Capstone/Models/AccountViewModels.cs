@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
-namespace dCC_Capstone.Models
+namespace Capstone.Models
 {
     public class ExternalLoginConfirmationViewModel
     {

@@ -1,4 +1,4 @@
-namespace dCC_Capstone.Migrations
+namespace Capstone.Migrations
 {
     using System;
     using System.Data.Entity.Migrations;
@@ -123,6 +123,8 @@ namespace dCC_Capstone.Migrations
                         ScreenName = c.String(maxLength: 30),
                         FirstName = c.String(),
                         LastName = c.String(),
+                        AccessToken = c.String(),
+                        RefreshToken = c.String(),
                         UserGuid = c.String(maxLength: 128),
                     })
                 .PrimaryKey(t => t.ListenerId)

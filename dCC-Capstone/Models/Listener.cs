@@ -5,7 +5,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Web;
 
-namespace dCC_Capstone.Models
+namespace Capstone.Models
 {
     public class Listener
     {
@@ -16,7 +16,8 @@ namespace dCC_Capstone.Models
         public string ScreenName { get; set; }
         public string FirstName { get; set; }
         public string LastName { get; set; }
-
+        public string AccessToken { get; set; }
+        public string RefreshToken { get; set; }
         [ForeignKey("User")]
         [Index(IsUnique = true)]
         public string UserGuid { get; set; }

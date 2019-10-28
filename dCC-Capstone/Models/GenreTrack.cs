@@ -5,7 +5,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Web;
 
-namespace dCC_Capstone.Models
+namespace Capstone.Models
 {
     public class GenreTrack
     {

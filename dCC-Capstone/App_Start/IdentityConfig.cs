@@ -10,9 +10,9 @@ using Microsoft.AspNet.Identity.EntityFramework;
 using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin;
 using Microsoft.Owin.Security;
-using dCC_Capstone.Models;
+using Capstone.Models;
 
-namespace dCC_Capstone
+namespace Capstone
 {
     public class EmailService : IIdentityMessageService
     {

@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Web;
 
-namespace dCC_Capstone.Models
+namespace Capstone.Models
 {
     public class Artist
     {

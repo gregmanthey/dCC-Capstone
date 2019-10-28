@@ -6,9 +6,9 @@ using System.Web.Mvc;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin.Security;
-using dCC_Capstone.Models;
+using Capstone.Models;
 
-namespace dCC_Capstone.Controllers
+namespace Capstone.Controllers
 {
     [Authorize]
     public class ManageController : Controller

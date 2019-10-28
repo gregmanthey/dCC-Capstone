@@ -1,8 +1,8 @@
 ﻿using Microsoft.Owin;
 using Owin;
 
-[assembly: OwinStartupAttribute(typeof(dCC_Capstone.Startup))]
-namespace dCC_Capstone
+[assembly: OwinStartupAttribute(typeof(Capstone.Startup))]
+namespace Capstone
 {
     public partial class Startup
     {
