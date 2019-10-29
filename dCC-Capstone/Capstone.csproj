@@ -37,6 +37,7 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <LangVersion>8.0</LangVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -46,6 +47,7 @@
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <LangVersion>8.0</LangVersion>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Microsoft.AspNetCore.Authentication, Version=2.2.0.0, Culture=neutral, PublicKeyToken=adb9793829ddae60, processorArchitecture=MSIL">
@@ -332,6 +334,10 @@
     <Compile Include="Migrations\201910281918066_initial.Designer.cs">
       <DependentUpon>201910281918066_initial.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201910290117473_LikeDislikeArtist.cs" />
+    <Compile Include="Migrations\201910290117473_LikeDislikeArtist.Designer.cs">
+      <DependentUpon>201910290117473_LikeDislikeArtist.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\Album.cs" />
@@ -481,6 +487,9 @@
   <ItemGroup>
     <EmbeddedResource Include="Migrations\201910281918066_initial.resx">
       <DependentUpon>201910281918066_initial.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201910290117473_LikeDislikeArtist.resx">
+      <DependentUpon>201910290117473_LikeDislikeArtist.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

@@ -1,31 +1,41 @@
-﻿@model IEnumerable<Capstone.Models.Artist>
+﻿@model List<Capstone.Models.Artist>
 
 @{
     ViewBag.Title = "PickArtists";
 }
 
 <h2>PickArtists</h2>
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+    <table class="table">
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model[0].ArtistName)
+            </th>
+            <th></th>
+        </tr>
 
-<table class="table">
-    <tr>
-        <th>
-            @Html.DisplayNameFor(model => model.ArtistSpotifyId)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.ArtistName)
-        </th>
-        <th></th>
-    </tr>
+        @for (int i = 0; i < Model.Count(); i++)
+        {
+            <tr>
+                <td>
+                    @Html.CheckBoxFor(m => Model[i].Liked)
+                    @Html.DisplayFor(modelItem => Model[i].ArtistName)
+                    @Html.HiddenFor(modelItem => Model[i].ArtistName)
+                    @Html.HiddenFor(modelItem => Model[i].ArtistId)
+                    @Html.HiddenFor(modelItem => Model[i].ArtistSpotifyId)<br />
+                </td>
+            </tr>
+        }
 
-@foreach (var item in Model) {
-    <tr>
-        <td>
-            @Html.DisplayFor(modelItem => item.ArtistSpotifyId)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.ArtistName)
-        </td>
-    </tr>
+    </table>
+    <div class="row">
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <input type="submit" value="Submit liked artists" class="btn btn-default" />
+            </div>
+        </div>
+    </div>
 }
 
-</table>

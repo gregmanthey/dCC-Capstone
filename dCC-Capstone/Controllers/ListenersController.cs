@@ -80,14 +80,19 @@ namespace Capstone.Controllers
             foreach (var genre in genres)
             {
                 var artist = await SingleHttpClientInstanceController.SpotifySearchForTopArtistInGenre(genre, currentListener.AccessToken, currentListener.RefreshToken);
-                if (artist != null)
+                if (artist != null && !artists.Contains(artist))
                 {
                     artists.Add(artist);
-
                 }
             }
             return View(artists);
         }
+
+        //[HttpPost]
+        //public ActionResult PickArtists(List<Artist> artists)
+        //{
+
+        //}
 
         // GET: Listeners/Edit/5
         public ActionResult Edit(int id)
