@@ -22,19 +22,23 @@ namespace Capstone.Controllers
     {
         private static ApplicationDbContext db = new ApplicationDbContext();
         private static HttpClient httpClient = new HttpClient();
-        private static string state;
+        private static string storedState;
         private const string redirect_url = "https://localhost:44353/Listeners/AuthResponse";
 
         public static Uri GetSpotifyAuthorization()
         {
-            state = "abcd0987qwer1234";//random string length 16 (arbitrary)
-            var url = $"https://accounts.spotify.com/authorize?client_id={Keys.SpotifyClientId}&response_type=code&redirect_uri={redirect_url}&scope=playlist-modify-private,user-read-private&state={state}";
+            storedState = Randomness.RandomString();
+            var url = $"https://accounts.spotify.com/authorize?client_id={Keys.SpotifyClientId}&response_type=code&redirect_uri={redirect_url}&scope=playlist-modify-private,user-read-private&state={storedState}";
             Uri uri = new Uri(url);
             return uri;
         }
 
         public async static Task<SpotifyAuthorizationTokenJsonResponse.Rootobject> PostSpotifyOauthToReceiveSpotifyAuthAndRefreshToken(string code, string state, Listener listener)
         {
+            if (state != storedState)
+            {
+                throw new Exception("Error: state returned from Spotify is not correct");
+            }
             string url = "https://accounts.spotify.com/api/token";
             
             //httpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));

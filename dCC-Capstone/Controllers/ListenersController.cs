@@ -126,7 +126,7 @@ namespace Capstone.Controllers
             }
             db.SaveChanges();
             
-            return View();
+            return RedirectToAction("Index");
         }
 
         // GET: Listeners/Edit/5

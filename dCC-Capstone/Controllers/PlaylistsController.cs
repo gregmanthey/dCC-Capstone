@@ -40,8 +40,11 @@ namespace Capstone.Controllers
         // GET: Playlists/Create
         public ActionResult Create()
         {
-            ViewBag.CreatedBy = new SelectList(db.Listeners, "ListenerId", "ScreenName");
-            return View();
+            ViewBag.Moods = new SelectList(db.Moods, "MoodId", "MoodName");
+            Playlist playlist = new Playlist() {
+                GenreWeightPercentage = 100,
+                PopularityWeightPercentage = 100 };
+            return View(playlist);
         }
 
         // POST: Playlists/Create
