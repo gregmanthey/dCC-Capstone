@@ -1,0 +1,93 @@
+﻿@model IEnumerable<Capstone.Models.Track>
+
+@{
+    ViewBag.Title = "Index";
+}
+
+<h2>Index</h2>
+
+<p>
+    @Html.ActionLink("Create New", "Create")
+</p>
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.TrackSpotifyId)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.TrackName)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.TrackValence)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.TrackEnergy)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.TrackDanceability)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.TrackLoudness)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.TrackTempo)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.TrackDurationInMs)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.TrackIsInMajorKey)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.TrackLiked)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.TrackDisliked)
+        </th>
+        <th></th>
+    </tr>
+
+@foreach (var item in Model) {
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.TrackSpotifyId)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.TrackName)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.TrackValence)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.TrackEnergy)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.TrackDanceability)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.TrackLoudness)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.TrackTempo)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.TrackDurationInMs)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.TrackIsInMajorKey)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.TrackLiked)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.TrackDisliked)
+        </td>
+        <td>
+            @Html.ActionLink("Edit", "Edit", new { id=item.TrackId }) |
+            @Html.ActionLink("Details", "Details", new { id=item.TrackId }) |
+            @Html.ActionLink("Delete", "Delete", new { id=item.TrackId })
+        </td>
+    </tr>
+}
+
+</table>

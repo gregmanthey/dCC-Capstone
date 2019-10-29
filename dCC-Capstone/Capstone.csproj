@@ -326,6 +326,7 @@
     <Compile Include="Controllers\ListenersController.cs" />
     <Compile Include="Controllers\ManageController.cs" />
     <Compile Include="Controllers\SingleHttpClientController.cs" />
+    <Compile Include="Controllers\TracksController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -355,10 +356,12 @@
     <Compile Include="Models\GenreTrack.cs" />
     <Compile Include="Models\ListenerTrack.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Randomness.cs" />
     <Compile Include="SpotifyArtistsSearchJsonResponse.cs" />
     <Compile Include="SpotifyAudioFeaturesJsonResponse.cs" />
     <Compile Include="SpotifyAuthorizationTokenResponse.cs" />
     <Compile Include="SpotifyGenresJsonResponse.cs" />
+    <Compile Include="SpotifyRefreshTokenJsonResponse.cs" />
     <Compile Include="SpotifyRelatedArtistsJsonResponse.cs" />
     <Compile Include="Startup.cs" />
   </ItemGroup>
@@ -467,6 +470,11 @@
     <Content Include="Views\Listeners\SpotifyLogin.cshtml" />
     <Content Include="Views\Listeners\Create.cshtml" />
     <Content Include="Views\Listeners\PickArtists.cshtml" />
+    <Content Include="Views\Tracks\Create.cshtml" />
+    <Content Include="Views\Tracks\Delete.cshtml" />
+    <Content Include="Views\Tracks\Details.cshtml" />
+    <Content Include="Views\Tracks\Edit.cshtml" />
+    <Content Include="Views\Tracks\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

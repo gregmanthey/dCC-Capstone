@@ -1,0 +1,106 @@
+﻿@model Capstone.Models.Track
+
+@{
+    ViewBag.Title = "Details";
+}
+
+<h2>Details</h2>
+
+<div>
+    <h4>Track</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.TrackSpotifyId)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.TrackSpotifyId)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.TrackName)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.TrackName)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.TrackValence)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.TrackValence)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.TrackEnergy)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.TrackEnergy)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.TrackDanceability)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.TrackDanceability)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.TrackLoudness)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.TrackLoudness)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.TrackTempo)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.TrackTempo)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.TrackDurationInMs)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.TrackDurationInMs)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.TrackIsInMajorKey)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.TrackIsInMajorKey)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.TrackLiked)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.TrackLiked)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.TrackDisliked)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.TrackDisliked)
+        </dd>
+
+    </dl>
+</div>
+<p>
+    @Html.ActionLink("Edit", "Edit", new { id = Model.TrackId }) |
+    @Html.ActionLink("Back to List", "Index")
+</p>

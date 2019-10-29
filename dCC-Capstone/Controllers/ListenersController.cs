@@ -59,8 +59,9 @@ namespace Capstone.Controllers
         }
         public async Task<ActionResult> AuthResponse(string code, string state)
         {
-            var result = await SingleHttpClientInstanceController.PostSpotifyOauthToReceiveSpotifyAuthAndRefreshToken(code, state);
             var currentListener = GetCurrentListener();
+            var result = await SingleHttpClientInstanceController.PostSpotifyOauthToReceiveSpotifyAuthAndRefreshToken(code, state, currentListener);
+            
             currentListener.AccessToken = result.access_token;
             currentListener.RefreshToken = result.refresh_token;
             db.SaveChanges();
@@ -74,13 +75,15 @@ namespace Capstone.Controllers
             var genres = new List<Genre>();
             if (!db.Genres.Any())
             {
-                await SingleHttpClientInstanceController.SpotifyGenerateGenres(currentListener.AccessToken, currentListener.RefreshToken);
+                await SingleHttpClientInstanceController.SpotifyGenerateGenres(currentListener);
             }
             genres.AddRange(db.Genres.ToList());
-            foreach (var genre in genres)
+            for(int i = 0; i < 30; i++)
             {
-                var artist = await SingleHttpClientInstanceController.SpotifySearchForTopArtistInGenre(genre, currentListener.AccessToken, currentListener.RefreshToken);
-                if (artist != null && !artists.Contains(artist))
+                var genre = genres[Randomness.RandomInt(0, genres.Count)];
+                var artist = await SingleHttpClientInstanceController.SpotifySearchForTopArtistInGenre(genre, currentListener);
+                if (artist != null && 
+                    artists.FirstOrDefault(a=>a.ArtistSpotifyId == artist.ArtistSpotifyId) is null)
                 {
                     artists.Add(artist);
                 }
@@ -88,11 +91,12 @@ namespace Capstone.Controllers
             return View(artists);
         }
 
-        //[HttpPost]
-        //public ActionResult PickArtists(List<Artist> artists)
-        //{
+        [HttpPost]
+        public ActionResult PickArtists(List<Artist> artists)
+        {
 
-        //}
+            return View();
+        }
 
         // GET: Listeners/Edit/5
         public ActionResult Edit(int id)
