@@ -36,21 +36,26 @@ namespace Capstone.Controllers
 
         // POST: Listeners/Create
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public ActionResult Create(Listener listener)
         {
-            try
+            if (ModelState.IsValid)
             {
-                // TODO: Add insert logic here
-                var userGuid = User.Identity.GetUserId();
-                listener.UserGuid = userGuid;
-                db.Listeners.Add(listener);
-                db.SaveChanges();
-                return RedirectToAction("SpotifyLogin");
+                try
+                {
+                    // TODO: Add insert logic here
+                    var userGuid = User.Identity.GetUserId();
+                    listener.UserGuid = userGuid;
+                    db.Listeners.Add(listener);
+                    db.SaveChanges();
+                    return RedirectToAction("SpotifyLogin");
+                }
+                catch
+                {
+                    return View();
+                }
             }
-            catch
-            {
-                return View();
-            }
+            return View();
         }
         public ActionResult SpotifyLogin()
         {
@@ -94,7 +99,33 @@ namespace Capstone.Controllers
         [HttpPost]
         public ActionResult PickArtists(List<Artist> artists)
         {
+            var listenerInDb = GetCurrentListener();
+            foreach (var artist in artists)
+            {
+                if (artist.Liked)
+                {
+                    Artist artistInDb = db.Artists.FirstOrDefault(a => a.ArtistSpotifyId == artist.ArtistSpotifyId);
 
+                    if (artistInDb is null)
+                    {
+                        artistInDb = db.Artists.Add(artist);
+                        db.SaveChanges();
+                    }
+
+                    ListenerArtist listenerArtistInDb = db.ListenerArtists.FirstOrDefault(la => la.Artist.ArtistSpotifyId == artist.ArtistSpotifyId && la.ListenerID == listenerInDb.ListenerId);
+
+                    if (listenerArtistInDb is null)
+                    {
+                        db.ListenerArtists.Add(new ListenerArtist() { ListenerID = listenerInDb.ListenerId, ArtistID = artistInDb.ArtistId, ArtistLiked = true });
+                    }
+                    else
+                    {
+                        listenerArtistInDb.ArtistLiked = true;
+                    }
+                }
+            }
+            db.SaveChanges();
+            
             return View();
         }
 

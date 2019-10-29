@@ -5,7 +5,7 @@ using System.Web;
 
 namespace Capstone
 {
-    public class SpotifyAuthorizationTokenResponse
+    public class SpotifyAuthorizationTokenJsonResponse
     {
         public class Rootobject
         {

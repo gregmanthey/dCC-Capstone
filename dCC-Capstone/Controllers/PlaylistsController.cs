@@ -11,102 +11,112 @@ using Capstone.Models;
 
 namespace Capstone.Controllers
 {
-    public class TracksController : Controller
+    public class PlaylistsController : Controller
     {
         private ApplicationDbContext db = new ApplicationDbContext();
 
-        // GET: Tracks
+        // GET: Playlists
         public async Task<ActionResult> Index()
         {
-            return View(await db.Tracks.ToListAsync());
+            var playlists = db.Playlists.Include(p => p.Listener);
+            return View(await playlists.ToListAsync());
         }
 
-        // GET: Tracks/Details/5
+        // GET: Playlists/Details/5
         public async Task<ActionResult> Details(int? id)
         {
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Track track = await db.Tracks.FindAsync(id);
-            if (track == null)
+            Playlist playlist = await db.Playlists.FindAsync(id);
+            if (playlist == null)
             {
                 return HttpNotFound();
             }
-            return View(track);
+            return View(playlist);
         }
 
-        // GET: Tracks/Create
+        // GET: Playlists/Create
         public ActionResult Create()
         {
+            ViewBag.CreatedBy = new SelectList(db.Listeners, "ListenerId", "ScreenName");
             return View();
         }
 
-        // POST: Tracks/Create
+        // POST: Playlists/Create
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Create(Track track)
+        public async Task<ActionResult> Create([Bind(Include = "PlaylistId,PlaylistName,CreatedBy")] Playlist playlist)
         {
-                var trackInDb = db.Tracks.Add(track);
+            if (ModelState.IsValid)
+            {
+                db.Playlists.Add(playlist);
                 await db.SaveChangesAsync();
-                return RedirectToAction("Details", new { id = trackInDb.TrackId});
+                return RedirectToAction("Index");
+            }
+
+            ViewBag.CreatedBy = new SelectList(db.Listeners, "ListenerId", "ScreenName", playlist.CreatedBy);
+            return View(playlist);
         }
 
-        // GET: Tracks/Edit/5
+        // GET: Playlists/Edit/5
         public async Task<ActionResult> Edit(int? id)
         {
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Track track = await db.Tracks.FindAsync(id);
-            if (track == null)
+            Playlist playlist = await db.Playlists.FindAsync(id);
+            if (playlist == null)
             {
                 return HttpNotFound();
             }
-            return View(track);
+            ViewBag.CreatedBy = new SelectList(db.Listeners, "ListenerId", "ScreenName", playlist.CreatedBy);
+            return View(playlist);
         }
 
-        // POST: Tracks/Edit/5
+        // POST: Playlists/Edit/5
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Edit([Bind(Include = "TrackId,TrackSpotifyId,TrackName,TrackValence,TrackEnergy,TrackDanceability,TrackLoudness,TrackTempo,TrackDurationInMs,TrackIsInMajorKey,TrackLiked,TrackDisliked")] Track track)
+        public async Task<ActionResult> Edit([Bind(Include = "PlaylistId,PlaylistName,CreatedBy")] Playlist playlist)
         {
             if (ModelState.IsValid)
             {
-                db.Entry(track).State = EntityState.Modified;
+                db.Entry(playlist).State = EntityState.Modified;
                 await db.SaveChangesAsync();
                 return RedirectToAction("Index");
             }
-            return View(track);
+            ViewBag.CreatedBy = new SelectList(db.Listeners, "ListenerId", "ScreenName", playlist.CreatedBy);
+            return View(playlist);
         }
 
-        // GET: Tracks/Delete/5
+        // GET: Playlists/Delete/5
         public async Task<ActionResult> Delete(int? id)
         {
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Track track = await db.Tracks.FindAsync(id);
-            if (track == null)
+            Playlist playlist = await db.Playlists.FindAsync(id);
+            if (playlist == null)
             {
                 return HttpNotFound();
             }
-            return View(track);
+            return View(playlist);
         }
 
-        // POST: Tracks/Delete/5
+        // POST: Playlists/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> DeleteConfirmed(int id)
         {
-            Track track = await db.Tracks.FindAsync(id);
-            db.Tracks.Remove(track);
+            Playlist playlist = await db.Playlists.FindAsync(id);
+            db.Playlists.Remove(playlist);
             await db.SaveChangesAsync();
             return RedirectToAction("Index");
         }

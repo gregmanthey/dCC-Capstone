@@ -33,7 +33,7 @@ namespace Capstone.Controllers
             return uri;
         }
 
-        public async static Task<SpotifyAuthorizationTokenResponse.Rootobject> PostSpotifyOauthToReceiveSpotifyAuthAndRefreshToken(string code, string state, Listener listener)
+        public async static Task<SpotifyAuthorizationTokenJsonResponse.Rootobject> PostSpotifyOauthToReceiveSpotifyAuthAndRefreshToken(string code, string state, Listener listener)
         {
             string url = "https://accounts.spotify.com/api/token";
             
@@ -45,7 +45,7 @@ namespace Capstone.Controllers
             parameters.Add("redirect_uri", redirect_url);
             var content = await SendSpotifyHttpRequest(url, "POST", listener, parameters);
             var jsonResponse = await content.Content.ReadAsStringAsync();
-            var token = JsonConvert.DeserializeObject<SpotifyAuthorizationTokenResponse.Rootobject>(jsonResponse);
+            var token = JsonConvert.DeserializeObject<SpotifyAuthorizationTokenJsonResponse.Rootobject>(jsonResponse);
             return token;
         }
 
@@ -106,6 +106,8 @@ namespace Capstone.Controllers
             var genres = new List<Genre>(db.Genres.ToList());
             return genres;
         }
+
+        //public async static Task<SpotifyTrackAudioFeaturesJsonResponse> GetSpotifyTrackDetails()
         public async static Task<HttpResponseMessage> SendSpotifyHttpRequest(string url, string type, Listener listener, Dictionary<string, string> postParameters = null)
         {
             Uri uri = new Uri(url);
