@@ -10,13 +10,17 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Web;
 using System.Web.Http;
+using System.Web.Mvc;
 using Capstone.Models;
 using Newtonsoft.Json;
+using Microsoft.AspNet.Identity;
+using System.Net.Http.Headers;
 
 namespace Capstone.Controllers
 {
-    public class SingleHttpClientInstanceController : ApiController
+    public class SingleHttpClientInstanceController : Controller
     {
+        private static ApplicationDbContext db = new ApplicationDbContext();
         private static HttpClient httpClient = new HttpClient();
         private static string state;
         private const string redirect_url = "https://localhost:44353/Listeners/AuthResponse";
@@ -29,111 +33,124 @@ namespace Capstone.Controllers
             return uri;
         }
 
-        public static SpotifyAuthorizationTokenResponse.Rootobject PostSpotifyOauthToReceiveSpotifyAuthAndRefreshToken(string code, string state)
+        public async static Task<SpotifyAuthorizationTokenResponse.Rootobject> PostSpotifyOauthToReceiveSpotifyAuthAndRefreshToken(string code, string state)
         {
             string url = "https://accounts.spotify.com/api/token";
+            var combinedId = Convert.ToBase64String(Encoding.UTF8.GetBytes(Keys.SpotifyClientId + ":" + Keys.SpotifyClientSecret));
+            httpClient.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Basic", combinedId);
+            httpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+
+            var parameters = new Dictionary<string, string>();
+            //parameters.Add("client_id", Keys.SpotifyClientId);
+            //parameters.Add("client_secret", Keys.SpotifyClientSecret);
+            parameters.Add("grant_type", "authorization_code");
+            parameters.Add("code", code);
+            parameters.Add("redirect_uri", redirect_url);
+            //string json = JsonConvert.SerializeObject(parameters);
+            //var httpContent = new StringContent(json, Encoding.Unicode, "application/x-www-form-urlencoded");
             Uri uri = new Uri(url);
-            var parameters = new List<KeyValuePair<string, string>>
-            {
-                new KeyValuePair<string, string>("client_id", Keys.SpotifyClientId),
-                new KeyValuePair<string, string>("client_secret", Keys.SpotifyClientSecret),
-                new KeyValuePair<string, string>("grant_type", "authorization_code"),
-                new KeyValuePair<string, string>("code", code),
-                new KeyValuePair<string, string>("redirect_uri", redirect_url)
-            };
-            var content = GetContentAsync(url, "POST", parameters);
-            var token = JsonConvert.DeserializeObject<SpotifyAuthorizationTokenResponse.Rootobject>(content);
+            var content = await httpClient.PostAsync(uri, new FormUrlEncodedContent(parameters));//GetContentAsync(url, "POST", parameters);
+            var jsonResponse = await content.Content.ReadAsStringAsync();
+            var token = JsonConvert.DeserializeObject<SpotifyAuthorizationTokenResponse.Rootobject>(jsonResponse);
             return token;
         }
 
-        public static SpotifyAuthorizationTokenResponse.Rootobject GetNewSpotifyAccessToken(string refresh_token)
+        public async static Task<SpotifyAuthorizationTokenResponse.Rootobject> GetNewSpotifyAccessToken(string refresh_token)
         {
             string url = "https://accounts.spotify.com/api/token";
-            Uri uri = new Uri(url);
+            var combinedId = Convert.ToBase64String(Encoding.UTF8.GetBytes(Keys.SpotifyClientId + ":" + Keys.SpotifyClientSecret));
+            httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Basic", combinedId);
+            httpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
             var parameters = new List<KeyValuePair<string, string>>
             {
                 new KeyValuePair<string, string>("grant_type", "refresh_token"),
                 new KeyValuePair<string, string>("refresh_token", refresh_token)
             };
-            var content = GetContentAsync(url, "POST", parameters);
-            var token = JsonConvert.DeserializeObject<SpotifyAuthorizationTokenResponse.Rootobject>(content);
+            //string json = JsonConvert.SerializeObject(parameters);
+            //var httpContent = new StringContent(json, Encoding.UTF8, "application/x-www-form-urlencoded");
+            Uri uri = new Uri(url);
+            var content = await httpClient.PostAsync(uri, new FormUrlEncodedContent(parameters));//GetContentAsync(url, "POST", parameters);
+            var jsonResponse = await content.Content.ReadAsStringAsync();
+            //var content = GetContentAsync(url, "POST", parameters);
+            var token = JsonConvert.DeserializeObject<SpotifyAuthorizationTokenResponse.Rootobject>(jsonResponse);
             return token;
         }
-        private static string GetContentAsync(string url,
-        string method = "POST",
-        IEnumerable<KeyValuePair<string, string>> parameters = null)
+
+        public async static Task<Artist> SpotifySearchForTopArtistInGenre(Genre genre, string accessToken, string refreshToken)
         {
-            return method == "POST" ? PostAsync(url, parameters) : GetAsync(url, parameters);
+            if (genre is null)
+            {
+                return null;
+            }
+            //GET https://api.spotify.com/v1/search
+            //Authorization: Bearer {access token}
+            string url = $"https://api.spotify.com/v1/search?q=genre:{genre.GenreSpotifyName}&type=artist&limit=1";
+            //Uri genreUri = new Uri(genre.GenreSpotifyName);
+            httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", accessToken);
+            //var parameters = new Dictionary<string, string>();
+
+            //parameters.Add("q", "genre:" + genre);
+            //parameters.Add("limit", "1");
+            //parameters.Add("type", "artist");
+
+
+            //string json = JsonConvert.SerializeObject(parameters);
+            //var httpContent = new StringContent(json, Encoding.UTF8, "application/json");
+            Uri uri = new Uri(url);
+            var content = await httpClient.GetAsync(uri);//, new FormUrlEncodedContent(parameters));//GetContentAsync(url, "POST", parameters);
+            if (content.StatusCode == HttpStatusCode.Unauthorized)
+            {
+                await GetNewSpotifyAccessToken(refreshToken);
+                return await SpotifySearchForTopArtistInGenre(genre, accessToken, refreshToken);
+            }
+            var jsonResponse = await content.Content.ReadAsStringAsync();
+            //var content = GetContentAsync(url, "GET", parameters);
+            var artistsRootobject = JsonConvert.DeserializeObject<SpotifyArtistsSearchJsonResponse.Rootobject>(jsonResponse);
+            try
+            {
+                var artistItem = artistsRootobject.artists.items[0];
+                Artist artist = new Artist() { ArtistName = artistItem.name, ArtistSpotifyId = artistItem.uri, Popularity = artistItem.popularity };
+
+                return artist;
+            }
+            catch (Exception)
+            {
+
+                return null;
+            }
         }
 
-        private static string PostAsync(string url, IEnumerable<KeyValuePair<string, string>> parameters = null)
+        public async static Task SpotifyGenerateGenres(string accessToken, string refreshToken)
         {
-            var uri = new Uri(url);
-
-            var request = WebRequest.Create(uri) as HttpWebRequest;
-            request.Method = "POST";
-            request.KeepAlive = true;
-            request.ContentType = "application/x-www-form-urlencoded";
-
-            var postParameters = GetPostParameters(parameters);
-
-            var bs = Encoding.UTF8.GetBytes(postParameters);
-            using (var reqStream = request.GetRequestStream())
+            //GET https://api.spotify.com/v1/search
+            //Authorization: Bearer {access token}
+            //genre.GenreSpotifyName;
+            string url = "https://api.spotify.com/v1/recommendations/available-genre-seeds";
+            httpClient.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", accessToken);
+            //var content = GetContentAsync(url, "GET", parameters);
+            //string json = JsonConvert.SerializeObject(parameters);
+            //var httpContent = new StringContent(json, Encoding.UTF8, "application/x-www-form-urlencoded");
+            Uri uri = new Uri(url);
+            var content = await httpClient.GetAsync(uri);//GetContentAsync(url, "POST", parameters);
+            if (content.StatusCode == HttpStatusCode.Unauthorized)
             {
-                reqStream.Write(bs, 0, bs.Length);
+                await GetNewSpotifyAccessToken(refreshToken);
+                await SpotifyGenerateGenres(accessToken, refreshToken);
+                return;
             }
-
-            using (var response = request.GetResponse())
+            var jsonResponse = await content.Content.ReadAsStringAsync();
+            var genreStrings = JsonConvert.DeserializeObject<SpotifyGenresJsonResponse.Rootobject>(jsonResponse).genres.ToList();
+            if (!db.Genres.Any())
             {
-                var sr = new StreamReader(response.GetResponseStream());
-                var jsonResponse = sr.ReadToEnd();
-                sr.Close();
-
-                return jsonResponse;
-            }
-        }
-
-        private static string GetPostParameters(IEnumerable<KeyValuePair<string, string>> parameters = null)
-        {
-            var postParameters = string.Empty;
-            foreach (var parameter in parameters)
-            {
-                postParameters += string.Format("&{0}={1}", parameter.Key,
-                    HttpUtility.HtmlEncode(parameter.Value));
-            }
-            postParameters = postParameters.Substring(1);
-
-            return postParameters;
-        }
-
-        private static string GetAsync(string url, IEnumerable<KeyValuePair<string, string>> parameters = null)
-        {
-            url += "?" + GetQueryStringParameters(parameters);
-
-            var forIdsWebRequest = WebRequest.Create(url);
-            using (var response = (HttpWebResponse)forIdsWebRequest.GetResponse())
-            {
-                using (var data = response.GetResponseStream())
-                using (var reader = new StreamReader(data))
+                foreach (var genre in genreStrings)
                 {
-                    var jsonResponse = reader.ReadToEnd();
-
-                    return jsonResponse;
+                    Genre newGenre = new Genre { GenreSpotifyName = genre };
+                    db.Genres.Add(newGenre);
                 }
+                db.SaveChanges();
             }
-        }
-
-        private static string GetQueryStringParameters(IEnumerable<KeyValuePair<string, string>> parameters = null)
-        {
-            var queryStringParameters = string.Empty;
-            foreach (var parameter in parameters)
-            {
-                queryStringParameters += string.Format("&{0}={1}", parameter.Key,
-                    HttpUtility.HtmlEncode(parameter.Value));
-            }
-            queryStringParameters = queryStringParameters.Substring(1);
-
-            return queryStringParameters;
+            //var genres = new List<Genre>(db.Genres.ToList());
+            //return genres;
         }
     }
 }
