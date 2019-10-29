@@ -10,11 +10,11 @@ namespace Capstone.Models
     public class ListenerArtist
     {
         [Key, Column(Order = 0)]
-        public int ListenerID { get; set; }
+        public int ListenerId { get; set; }
         public virtual Listener Listener { get; set; }
 
         [Key, Column(Order = 1)]
-        public int ArtistID { get; set; }
+        public int ArtistId { get; set; }
         public virtual Artist Artist { get; set; }
 
         public bool ArtistLiked { get; set; }

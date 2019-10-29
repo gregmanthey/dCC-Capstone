@@ -7,11 +7,11 @@ using System.Web;
 
 namespace Capstone.Models
 {
-    public class GenreTrack
+    public class PlaylistTracks
     {
         [Key, Column(Order = 0)]
-        public int GenreId { get; set; }
-        public virtual Genre Genre { get; set; }
+        public int ListenerId { get; set; }
+        public virtual Listener Listener { get; set; }
 
         [Key, Column(Order = 1)]
         public int TrackId { get; set; }

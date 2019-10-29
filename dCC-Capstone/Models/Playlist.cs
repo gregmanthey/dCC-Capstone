@@ -13,6 +13,10 @@ namespace Capstone.Models
         public int PlaylistId { get; set; }
         public string PlaylistName { get; set; }
         public Mood PlaylistMood { get; set; }
+        [Range(0,100)]
+        public int GenreWeightPercentage { get; set; }
+        [Range(0, 100)]
+        public int PopularityWeightPercentage { get; set; }
 
         [ForeignKey("Listener")]
         public int CreatedBy { get; set; }

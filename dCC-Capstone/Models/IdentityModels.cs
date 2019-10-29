@@ -32,6 +32,7 @@ namespace Capstone.Models
         public DbSet<ListenerTrack> ListenerTracks { get; set; }
         public DbSet<Mood> Moods { get; set; }
         public DbSet<Playlist> Playlists { get; set; }
+        public DbSet<PlaylistTracks> PlaylistTracks { get; set; }
         public DbSet<Track> Tracks { get; set; }
 
         protected override void OnModelCreating(DbModelBuilder modelBuilder)

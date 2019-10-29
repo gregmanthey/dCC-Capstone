@@ -10,11 +10,11 @@ namespace Capstone.Models
     public class GenreArtist
     {
         [Key, Column(Order = 0)]
-        public int GenreID { get; set; }
+        public int GenreId { get; set; }
         public virtual Genre Genre { get; set; }
 
         [Key, Column(Order = 1)]
-        public int ArtistID { get; set; }
+        public int ArtistId { get; set; }
         public virtual Artist Artist { get; set; }
     }
 }

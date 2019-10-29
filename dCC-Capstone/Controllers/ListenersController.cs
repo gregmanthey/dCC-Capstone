@@ -112,11 +112,11 @@ namespace Capstone.Controllers
                         db.SaveChanges();
                     }
 
-                    ListenerArtist listenerArtistInDb = db.ListenerArtists.FirstOrDefault(la => la.Artist.ArtistSpotifyId == artist.ArtistSpotifyId && la.ListenerID == listenerInDb.ListenerId);
+                    ListenerArtist listenerArtistInDb = db.ListenerArtists.FirstOrDefault(la => la.Artist.ArtistSpotifyId == artist.ArtistSpotifyId && la.ListenerId == listenerInDb.ListenerId);
 
                     if (listenerArtistInDb is null)
                     {
-                        db.ListenerArtists.Add(new ListenerArtist() { ListenerID = listenerInDb.ListenerId, ArtistID = artistInDb.ArtistId, ArtistLiked = true });
+                        db.ListenerArtists.Add(new ListenerArtist() { ListenerId = listenerInDb.ListenerId, ArtistId = artistInDb.ArtistId, ArtistLiked = true });
                     }
                     else
                     {
