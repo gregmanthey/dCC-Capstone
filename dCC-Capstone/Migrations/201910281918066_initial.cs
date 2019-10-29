@@ -26,6 +26,7 @@ namespace Capstone.Migrations
                         ArtistId = c.Int(nullable: false, identity: true),
                         ArtistSpotifyId = c.String(),
                         ArtistName = c.String(),
+                        Popularity = c.Double(nullable: false),
                     })
                 .PrimaryKey(t => t.ArtistId);
             

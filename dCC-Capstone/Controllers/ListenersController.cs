@@ -3,6 +3,7 @@ using Microsoft.AspNet.Identity;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
 
@@ -56,16 +57,36 @@ namespace Capstone.Controllers
             ViewBag.SpotifyAuthorizationUri = SingleHttpClientInstanceController.GetSpotifyAuthorization();
             return View();
         }
-        public ActionResult AuthResponse(string code, string state)
+        public async Task<ActionResult> AuthResponse(string code, string state)
         {
-            var result = SingleHttpClientInstanceController.PostSpotifyOauthToReceiveSpotifyAuthAndRefreshToken(code, state);
-            var userGuid = User.Identity.GetUserId();
-            var currentListener = db.Listeners.FirstOrDefault(l => l.UserGuid == userGuid);
+            var result = await SingleHttpClientInstanceController.PostSpotifyOauthToReceiveSpotifyAuthAndRefreshToken(code, state);
+            var currentListener = GetCurrentListener();
             currentListener.AccessToken = result.access_token;
             currentListener.RefreshToken = result.refresh_token;
             db.SaveChanges();
 
             return RedirectToAction("PickArtists");
+        }
+        public async Task<ActionResult> PickArtists()
+        {
+            var currentListener = GetCurrentListener();
+            var artists = new List<Artist>();
+            var genres = new List<Genre>();
+            if (!db.Genres.Any())
+            {
+                await SingleHttpClientInstanceController.SpotifyGenerateGenres(currentListener.AccessToken, currentListener.RefreshToken);
+            }
+            genres.AddRange(db.Genres.ToList());
+            foreach (var genre in genres)
+            {
+                var artist = await SingleHttpClientInstanceController.SpotifySearchForTopArtistInGenre(genre, currentListener.AccessToken, currentListener.RefreshToken);
+                if (artist != null)
+                {
+                    artists.Add(artist);
+
+                }
+            }
+            return View(artists);
         }
 
         // GET: Listeners/Edit/5
@@ -110,6 +131,11 @@ namespace Capstone.Controllers
             {
                 return View();
             }
+        }
+        public Listener GetCurrentListener()
+        {
+            string userGuid = User.Identity.GetUserId();
+            return db.Listeners.FirstOrDefault(l => l.UserGuid == userGuid);
         }
     }
 }
