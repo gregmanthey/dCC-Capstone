@@ -326,7 +326,7 @@
     <Compile Include="Controllers\ListenersController.cs" />
     <Compile Include="Controllers\ManageController.cs" />
     <Compile Include="Controllers\PlaylistsController.cs" />
-    <Compile Include="Controllers\SingleHttpClientController.cs" />
+    <Compile Include="Controllers\SpotifyInteractionController.cs" />
     <Compile Include="Controllers\TracksController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>

@@ -59,13 +59,13 @@ namespace Capstone.Controllers
         }
         public ActionResult SpotifyLogin()
         {
-            ViewBag.SpotifyAuthorizationUri = SingleHttpClientInstanceController.GetSpotifyAuthorization();
+            ViewBag.SpotifyAuthorizationUri = SpotifyInteractionController.GetSpotifyAuthorization();
             return View();
         }
         public async Task<ActionResult> AuthResponse(string code, string state)
         {
             var currentListener = GetCurrentListener();
-            var result = await SingleHttpClientInstanceController.PostSpotifyOauthToReceiveSpotifyAuthAndRefreshToken(code, state, currentListener);
+            var result = await SpotifyInteractionController.PostSpotifyOauthToReceiveSpotifyAuthAndRefreshToken(code, state, currentListener);
             
             currentListener.AccessToken = result.access_token;
             currentListener.RefreshToken = result.refresh_token;
@@ -80,13 +80,13 @@ namespace Capstone.Controllers
             var genres = new List<Genre>();
             if (!db.Genres.Any())
             {
-                await SingleHttpClientInstanceController.SpotifyGenerateGenres(currentListener);
+                await SpotifyInteractionController.SpotifyGenerateGenreSeeds(currentListener);
             }
             genres.AddRange(db.Genres.ToList());
             for(int i = 0; i < 30; i++)
             {
                 var genre = genres[Randomness.RandomInt(0, genres.Count)];
-                var artist = await SingleHttpClientInstanceController.SpotifySearchForArtistInGenre(genre, currentListener);
+                var artist = await SpotifyInteractionController.SpotifySearchForArtistInGenre(genre, currentListener);
                 if (artist != null && 
                     artists.FirstOrDefault(a=>a.ArtistSpotifyId == artist.ArtistSpotifyId) is null)
                 {

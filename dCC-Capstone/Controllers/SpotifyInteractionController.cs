@@ -18,7 +18,7 @@ using System.Net.Http.Headers;
 
 namespace Capstone.Controllers
 {
-    public class SingleHttpClientInstanceController : Controller
+    public class SpotifyInteractionController : Controller
     {
         private static ApplicationDbContext db = new ApplicationDbContext();
         private static HttpClient httpClient = new HttpClient();
@@ -101,7 +101,7 @@ namespace Capstone.Controllers
             }
         }
 
-        public async static Task<IList<Genre>> SpotifyGenerateGenres(Listener listener)
+        public async static Task<IList<Genre>> SpotifyGenerateGenreSeeds(Listener listener)
         {
             //GET https://api.spotify.com/v1/search
             //Authorization: Bearer {access token}
