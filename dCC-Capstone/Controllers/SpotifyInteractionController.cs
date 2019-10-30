@@ -88,7 +88,7 @@ namespace Capstone.Controllers
                 
                 Artist artist = new Artist() {
                     ArtistName = artistItem.name,
-                    ArtistSpotifyId = artistItem.uri,
+                    ArtistSpotifyId = artistItem.id,
                     Popularity = artistItem.popularity,
                     ArtistGenres = artistGenres,
                     ArtistImageUrl = artistItem.images[0].url,
