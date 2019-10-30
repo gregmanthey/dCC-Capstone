@@ -11,6 +11,7 @@ namespace Capstone.Models
         [Key]
         public int ArtistId { get; set; }
         public string ArtistSpotifyId { get; set; }
+        public string ArtistSpotifyUrl { get; set; }
         public string ArtistName { get; set; }
         public string ArtistImageUrl { get; set; }
         public double Popularity { get; set; }

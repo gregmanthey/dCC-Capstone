@@ -91,7 +91,8 @@ namespace Capstone.Controllers
                     ArtistSpotifyId = artistItem.uri,
                     Popularity = artistItem.popularity,
                     ArtistGenres = artistGenres,
-                    ArtistImageUrl = artistItem.images[0].url };
+                    ArtistImageUrl = artistItem.images[0].url,
+                    ArtistSpotifyUrl = artistItem.external_urls.spotify };
 
                 return artist;
             }

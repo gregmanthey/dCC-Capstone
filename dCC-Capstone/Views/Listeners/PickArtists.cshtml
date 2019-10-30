@@ -13,21 +13,25 @@
         {
 
             <div class="card text-center mx-auto my-1" style="width:18rem">
-                <img class="card-img-top" src="@Model[i].ArtistImageUrl" alt="@Model[i].ArtistName">
-                <div class="card-body">
-                    @Html.CheckBoxFor(m => Model[i].Checked)
-                    <h5 class="card-title">@Model[i].ArtistName</h5>
-                    <p class="card-text">
-                        <b>Popularity:</b> @Model[i].Popularity/100<br />
-                        <b>Genres:</b><br />
-                        @for (int j = 0; j < 3 && j < Model[i].ArtistGenres.Count(); j++)
-                        {
-                            @Html.DisplayFor(modelItem => Model[i].ArtistGenres[j].GenreSpotifyName)
+                <a target="_blank" rel="noopener nofollow noreferrer" href="@Model[i].ArtistSpotifyUrl" >
+                    <img class="card-img-top" src="@Model[i].ArtistImageUrl" alt="@Model[i].ArtistName">
+                    </a>
+                    <div class="card-body">
+                        @Html.CheckBoxFor(m => Model[i].Checked)<br />
+                        <a target="_blank" rel="noopener nofollow noreferrer" href="@Model[i].ArtistSpotifyUrl" class="card-title h5">@Model[i].ArtistName</a>
+                        <p class="card-text">
+                            <b>Popularity:</b> @Model[i].Popularity/100<br />
+                            <b>Genres:</b><br />
+                            @for (int j = 0; j < 3 && j < Model[i].ArtistGenres.Count(); j++)
+                            {
+                                <a target="_blank" rel="noopener nofollow noreferrer" href="https://duckduckgo.com/?q=@Model[i].ArtistGenres[j].GenreSpotifyName">
+                                    @Model[i].ArtistGenres[j].GenreSpotifyName
+                            </a>
                             <br />
                         }
-                    </p>
-                </div>
-            </div>
+                        </p>
+                    </div>
+</div>
             @Html.HiddenFor(modelItem => Model[i].ArtistGenres)
             @Html.HiddenFor(modelItem => Model[i].ArtistName)
             @Html.HiddenFor(modelItem => Model[i].Popularity)
