@@ -3,7 +3,7 @@ namespace Capstone.Migrations
     using System;
     using System.Data.Entity.Migrations;
     
-    public partial class initial : DbMigration
+    public partial class init : DbMigration
     {
         public override void Up()
         {
@@ -27,8 +27,26 @@ namespace Capstone.Migrations
                         ArtistSpotifyId = c.String(),
                         ArtistName = c.String(),
                         Popularity = c.Double(nullable: false),
+                        Liked = c.Boolean(nullable: false),
+                        Disliked = c.Boolean(nullable: false),
                     })
                 .PrimaryKey(t => t.ArtistId);
+            
+            CreateTable(
+                "dbo.Genres",
+                c => new
+                    {
+                        GenreId = c.Int(nullable: false, identity: true),
+                        GenreName = c.String(),
+                        GenreSpotifyName = c.String(),
+                        ParentGenreId = c.Int(),
+                        Playlist_PlaylistId = c.Int(),
+                    })
+                .PrimaryKey(t => t.GenreId)
+                .ForeignKey("dbo.Genres", t => t.ParentGenreId)
+                .ForeignKey("dbo.Playlists", t => t.Playlist_PlaylistId)
+                .Index(t => t.ParentGenreId)
+                .Index(t => t.Playlist_PlaylistId);
             
             CreateTable(
                 "dbo.Tracks",
@@ -59,62 +77,33 @@ namespace Capstone.Migrations
                 .Index(t => t.Playlist_PlaylistId);
             
             CreateTable(
-                "dbo.GenreArtists",
-                c => new
-                    {
-                        GenreID = c.Int(nullable: false),
-                        ArtistID = c.Int(nullable: false),
-                    })
-                .PrimaryKey(t => new { t.GenreID, t.ArtistID })
-                .ForeignKey("dbo.Artists", t => t.ArtistID, cascadeDelete: true)
-                .ForeignKey("dbo.Genres", t => t.GenreID, cascadeDelete: true)
-                .Index(t => t.GenreID)
-                .Index(t => t.ArtistID);
-            
-            CreateTable(
-                "dbo.Genres",
-                c => new
-                    {
-                        GenreId = c.Int(nullable: false, identity: true),
-                        GenreName = c.String(),
-                        GenreSpotifyName = c.String(),
-                        ParentGenreId = c.Int(),
-                        Playlist_PlaylistId = c.Int(),
-                    })
-                .PrimaryKey(t => t.GenreId)
-                .ForeignKey("dbo.Genres", t => t.ParentGenreId)
-                .ForeignKey("dbo.Playlists", t => t.Playlist_PlaylistId)
-                .Index(t => t.ParentGenreId)
-                .Index(t => t.Playlist_PlaylistId);
-            
-            CreateTable(
                 "dbo.GenreTracks",
                 c => new
                     {
-                        GenreID = c.Int(nullable: false),
-                        TrackID = c.Int(nullable: false),
+                        GenreId = c.Int(nullable: false),
+                        TrackId = c.Int(nullable: false),
                     })
-                .PrimaryKey(t => new { t.GenreID, t.TrackID })
-                .ForeignKey("dbo.Genres", t => t.GenreID, cascadeDelete: true)
-                .ForeignKey("dbo.Tracks", t => t.TrackID, cascadeDelete: true)
-                .Index(t => t.GenreID)
-                .Index(t => t.TrackID);
+                .PrimaryKey(t => new { t.GenreId, t.TrackId })
+                .ForeignKey("dbo.Genres", t => t.GenreId, cascadeDelete: true)
+                .ForeignKey("dbo.Tracks", t => t.TrackId, cascadeDelete: true)
+                .Index(t => t.GenreId)
+                .Index(t => t.TrackId);
             
             CreateTable(
                 "dbo.ListenerArtists",
                 c => new
                     {
-                        ListenerID = c.Int(nullable: false),
-                        ArtistID = c.Int(nullable: false),
+                        ListenerId = c.Int(nullable: false),
+                        ArtistId = c.Int(nullable: false),
                         ArtistLiked = c.Boolean(nullable: false),
                         ArtistDisliked = c.Boolean(nullable: false),
                         FavoriteArtist = c.Boolean(nullable: false),
                     })
-                .PrimaryKey(t => new { t.ListenerID, t.ArtistID })
-                .ForeignKey("dbo.Artists", t => t.ArtistID, cascadeDelete: true)
-                .ForeignKey("dbo.Listeners", t => t.ListenerID, cascadeDelete: true)
-                .Index(t => t.ListenerID)
-                .Index(t => t.ArtistID);
+                .PrimaryKey(t => new { t.ListenerId, t.ArtistId })
+                .ForeignKey("dbo.Artists", t => t.ArtistId, cascadeDelete: true)
+                .ForeignKey("dbo.Listeners", t => t.ListenerId, cascadeDelete: true)
+                .Index(t => t.ListenerId)
+                .Index(t => t.ArtistId);
             
             CreateTable(
                 "dbo.Listeners",
@@ -198,31 +187,31 @@ namespace Capstone.Migrations
                 "dbo.ListenerGenres",
                 c => new
                     {
-                        ListenerID = c.Int(nullable: false),
-                        GenreID = c.Int(nullable: false),
+                        ListenerId = c.Int(nullable: false),
+                        GenreId = c.Int(nullable: false),
                         GenreLiked = c.Boolean(nullable: false),
                         GenreDisliked = c.Boolean(nullable: false),
                     })
-                .PrimaryKey(t => new { t.ListenerID, t.GenreID })
-                .ForeignKey("dbo.Genres", t => t.GenreID, cascadeDelete: true)
-                .ForeignKey("dbo.Listeners", t => t.ListenerID, cascadeDelete: true)
-                .Index(t => t.ListenerID)
-                .Index(t => t.GenreID);
+                .PrimaryKey(t => new { t.ListenerId, t.GenreId })
+                .ForeignKey("dbo.Genres", t => t.GenreId, cascadeDelete: true)
+                .ForeignKey("dbo.Listeners", t => t.ListenerId, cascadeDelete: true)
+                .Index(t => t.ListenerId)
+                .Index(t => t.GenreId);
             
             CreateTable(
                 "dbo.ListenerTracks",
                 c => new
                     {
-                        ListenerID = c.Int(nullable: false),
-                        TrackID = c.Int(nullable: false),
+                        ListenerId = c.Int(nullable: false),
+                        TrackId = c.Int(nullable: false),
                         TrackLiked = c.Boolean(nullable: false),
                         TrackDisliked = c.Boolean(nullable: false),
                     })
-                .PrimaryKey(t => new { t.ListenerID, t.TrackID })
-                .ForeignKey("dbo.Listeners", t => t.ListenerID, cascadeDelete: true)
-                .ForeignKey("dbo.Tracks", t => t.TrackID, cascadeDelete: true)
-                .Index(t => t.ListenerID)
-                .Index(t => t.TrackID);
+                .PrimaryKey(t => new { t.ListenerId, t.TrackId })
+                .ForeignKey("dbo.Listeners", t => t.ListenerId, cascadeDelete: true)
+                .ForeignKey("dbo.Tracks", t => t.TrackId, cascadeDelete: true)
+                .Index(t => t.ListenerId)
+                .Index(t => t.TrackId);
             
             CreateTable(
                 "dbo.Moods",
@@ -250,6 +239,8 @@ namespace Capstone.Migrations
                     {
                         PlaylistId = c.Int(nullable: false, identity: true),
                         PlaylistName = c.String(),
+                        GenreWeightPercentage = c.Int(nullable: false),
+                        PopularityWeightPercentage = c.Int(nullable: false),
                         CreatedBy = c.Int(nullable: false),
                         PlaylistMood_MoodId = c.Int(),
                     })
@@ -260,6 +251,19 @@ namespace Capstone.Migrations
                 .Index(t => t.PlaylistMood_MoodId);
             
             CreateTable(
+                "dbo.PlaylistTracks",
+                c => new
+                    {
+                        ListenerId = c.Int(nullable: false),
+                        TrackId = c.Int(nullable: false),
+                    })
+                .PrimaryKey(t => new { t.ListenerId, t.TrackId })
+                .ForeignKey("dbo.Listeners", t => t.ListenerId, cascadeDelete: true)
+                .ForeignKey("dbo.Tracks", t => t.TrackId, cascadeDelete: true)
+                .Index(t => t.ListenerId)
+                .Index(t => t.TrackId);
+            
+            CreateTable(
                 "dbo.IdentityRoles",
                 c => new
                     {
@@ -268,58 +272,77 @@ namespace Capstone.Migrations
                     })
                 .PrimaryKey(t => t.Id);
             
+            CreateTable(
+                "dbo.GenreArtists",
+                c => new
+                    {
+                        Genre_GenreId = c.Int(nullable: false),
+                        Artist_ArtistId = c.Int(nullable: false),
+                    })
+                .PrimaryKey(t => new { t.Genre_GenreId, t.Artist_ArtistId })
+                .ForeignKey("dbo.Genres", t => t.Genre_GenreId, cascadeDelete: true)
+                .ForeignKey("dbo.Artists", t => t.Artist_ArtistId, cascadeDelete: true)
+                .Index(t => t.Genre_GenreId)
+                .Index(t => t.Artist_ArtistId);
+            
         }
         
         public override void Down()
         {
             DropForeignKey("dbo.AspNetUserRoles", "IdentityRole_Id", "dbo.IdentityRoles");
+            DropForeignKey("dbo.PlaylistTracks", "TrackId", "dbo.Tracks");
+            DropForeignKey("dbo.PlaylistTracks", "ListenerId", "dbo.Listeners");
             DropForeignKey("dbo.Tracks", "Playlist_PlaylistId", "dbo.Playlists");
             DropForeignKey("dbo.Playlists", "PlaylistMood_MoodId", "dbo.Moods");
             DropForeignKey("dbo.Genres", "Playlist_PlaylistId", "dbo.Playlists");
             DropForeignKey("dbo.Playlists", "CreatedBy", "dbo.Listeners");
-            DropForeignKey("dbo.ListenerTracks", "TrackID", "dbo.Tracks");
-            DropForeignKey("dbo.ListenerTracks", "ListenerID", "dbo.Listeners");
-            DropForeignKey("dbo.ListenerGenres", "ListenerID", "dbo.Listeners");
-            DropForeignKey("dbo.ListenerGenres", "GenreID", "dbo.Genres");
-            DropForeignKey("dbo.ListenerArtists", "ListenerID", "dbo.Listeners");
+            DropForeignKey("dbo.ListenerTracks", "TrackId", "dbo.Tracks");
+            DropForeignKey("dbo.ListenerTracks", "ListenerId", "dbo.Listeners");
+            DropForeignKey("dbo.ListenerGenres", "ListenerId", "dbo.Listeners");
+            DropForeignKey("dbo.ListenerGenres", "GenreId", "dbo.Genres");
+            DropForeignKey("dbo.ListenerArtists", "ListenerId", "dbo.Listeners");
             DropForeignKey("dbo.Listeners", "UserGuid", "dbo.ApplicationUsers");
             DropForeignKey("dbo.AspNetUserRoles", "ApplicationUser_Id", "dbo.ApplicationUsers");
             DropForeignKey("dbo.AspNetUserLogins", "ApplicationUser_Id", "dbo.ApplicationUsers");
             DropForeignKey("dbo.IdentityUserClaims", "ApplicationUser_Id", "dbo.ApplicationUsers");
-            DropForeignKey("dbo.ListenerArtists", "ArtistID", "dbo.Artists");
-            DropForeignKey("dbo.GenreTracks", "TrackID", "dbo.Tracks");
-            DropForeignKey("dbo.GenreTracks", "GenreID", "dbo.Genres");
-            DropForeignKey("dbo.GenreArtists", "GenreID", "dbo.Genres");
-            DropForeignKey("dbo.Genres", "ParentGenreId", "dbo.Genres");
-            DropForeignKey("dbo.GenreArtists", "ArtistID", "dbo.Artists");
+            DropForeignKey("dbo.ListenerArtists", "ArtistId", "dbo.Artists");
+            DropForeignKey("dbo.GenreTracks", "TrackId", "dbo.Tracks");
+            DropForeignKey("dbo.GenreTracks", "GenreId", "dbo.Genres");
             DropForeignKey("dbo.Tracks", "TrackArtist_ArtistId", "dbo.Artists");
             DropForeignKey("dbo.Tracks", "TrackAlbum_AlbumId", "dbo.Albums");
             DropForeignKey("dbo.Albums", "AlbumArtist_ArtistId", "dbo.Artists");
+            DropForeignKey("dbo.Genres", "ParentGenreId", "dbo.Genres");
+            DropForeignKey("dbo.GenreArtists", "Artist_ArtistId", "dbo.Artists");
+            DropForeignKey("dbo.GenreArtists", "Genre_GenreId", "dbo.Genres");
+            DropIndex("dbo.GenreArtists", new[] { "Artist_ArtistId" });
+            DropIndex("dbo.GenreArtists", new[] { "Genre_GenreId" });
+            DropIndex("dbo.PlaylistTracks", new[] { "TrackId" });
+            DropIndex("dbo.PlaylistTracks", new[] { "ListenerId" });
             DropIndex("dbo.Playlists", new[] { "PlaylistMood_MoodId" });
             DropIndex("dbo.Playlists", new[] { "CreatedBy" });
-            DropIndex("dbo.ListenerTracks", new[] { "TrackID" });
-            DropIndex("dbo.ListenerTracks", new[] { "ListenerID" });
-            DropIndex("dbo.ListenerGenres", new[] { "GenreID" });
-            DropIndex("dbo.ListenerGenres", new[] { "ListenerID" });
+            DropIndex("dbo.ListenerTracks", new[] { "TrackId" });
+            DropIndex("dbo.ListenerTracks", new[] { "ListenerId" });
+            DropIndex("dbo.ListenerGenres", new[] { "GenreId" });
+            DropIndex("dbo.ListenerGenres", new[] { "ListenerId" });
             DropIndex("dbo.AspNetUserRoles", new[] { "IdentityRole_Id" });
             DropIndex("dbo.AspNetUserRoles", new[] { "ApplicationUser_Id" });
             DropIndex("dbo.AspNetUserLogins", new[] { "ApplicationUser_Id" });
             DropIndex("dbo.IdentityUserClaims", new[] { "ApplicationUser_Id" });
             DropIndex("dbo.Listeners", new[] { "UserGuid" });
             DropIndex("dbo.Listeners", new[] { "ScreenName" });
-            DropIndex("dbo.ListenerArtists", new[] { "ArtistID" });
-            DropIndex("dbo.ListenerArtists", new[] { "ListenerID" });
-            DropIndex("dbo.GenreTracks", new[] { "TrackID" });
-            DropIndex("dbo.GenreTracks", new[] { "GenreID" });
-            DropIndex("dbo.Genres", new[] { "Playlist_PlaylistId" });
-            DropIndex("dbo.Genres", new[] { "ParentGenreId" });
-            DropIndex("dbo.GenreArtists", new[] { "ArtistID" });
-            DropIndex("dbo.GenreArtists", new[] { "GenreID" });
+            DropIndex("dbo.ListenerArtists", new[] { "ArtistId" });
+            DropIndex("dbo.ListenerArtists", new[] { "ListenerId" });
+            DropIndex("dbo.GenreTracks", new[] { "TrackId" });
+            DropIndex("dbo.GenreTracks", new[] { "GenreId" });
             DropIndex("dbo.Tracks", new[] { "Playlist_PlaylistId" });
             DropIndex("dbo.Tracks", new[] { "TrackArtist_ArtistId" });
             DropIndex("dbo.Tracks", new[] { "TrackAlbum_AlbumId" });
+            DropIndex("dbo.Genres", new[] { "Playlist_PlaylistId" });
+            DropIndex("dbo.Genres", new[] { "ParentGenreId" });
             DropIndex("dbo.Albums", new[] { "AlbumArtist_ArtistId" });
+            DropTable("dbo.GenreArtists");
             DropTable("dbo.IdentityRoles");
+            DropTable("dbo.PlaylistTracks");
             DropTable("dbo.Playlists");
             DropTable("dbo.Moods");
             DropTable("dbo.ListenerTracks");
@@ -331,9 +354,8 @@ namespace Capstone.Migrations
             DropTable("dbo.Listeners");
             DropTable("dbo.ListenerArtists");
             DropTable("dbo.GenreTracks");
-            DropTable("dbo.Genres");
-            DropTable("dbo.GenreArtists");
             DropTable("dbo.Tracks");
+            DropTable("dbo.Genres");
             DropTable("dbo.Artists");
             DropTable("dbo.Albums");
         }

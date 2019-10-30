@@ -332,23 +332,14 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Keys.cs" />
-    <Compile Include="Migrations\201910281918066_initial.cs" />
-    <Compile Include="Migrations\201910281918066_initial.Designer.cs">
-      <DependentUpon>201910281918066_initial.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201910290117473_LikeDislikeArtist.cs" />
-    <Compile Include="Migrations\201910290117473_LikeDislikeArtist.Designer.cs">
-      <DependentUpon>201910290117473_LikeDislikeArtist.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201910291636417_AddPlaylistTracks.cs" />
-    <Compile Include="Migrations\201910291636417_AddPlaylistTracks.Designer.cs">
-      <DependentUpon>201910291636417_AddPlaylistTracks.cs</DependentUpon>
+    <Compile Include="Migrations\201910300230263_init.cs" />
+    <Compile Include="Migrations\201910300230263_init.Designer.cs">
+      <DependentUpon>201910300230263_init.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\Album.cs" />
     <Compile Include="Models\Artist.cs" />
-    <Compile Include="Models\GenreArtist.cs" />
     <Compile Include="Models\ListenerArtist.cs" />
     <Compile Include="Models\Genre.cs" />
     <Compile Include="Models\ListenerGenre.cs" />
@@ -547,14 +538,8 @@
     <Analyzer Include="packages\Microsoft.CodeAnalysis.VersionCheckAnalyzer.2.9.6\analyzers\dotnet\Microsoft.CodeAnalysis.VersionCheckAnalyzer.dll" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Migrations\201910281918066_initial.resx">
-      <DependentUpon>201910281918066_initial.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201910290117473_LikeDislikeArtist.resx">
-      <DependentUpon>201910290117473_LikeDislikeArtist.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201910291636417_AddPlaylistTracks.resx">
-      <DependentUpon>201910291636417_AddPlaylistTracks.cs</DependentUpon>
+    <EmbeddedResource Include="Migrations\201910300230263_init.resx">
+      <DependentUpon>201910300230263_init.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

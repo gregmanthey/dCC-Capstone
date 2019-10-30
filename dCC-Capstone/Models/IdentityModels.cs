@@ -24,7 +24,7 @@ namespace Capstone.Models
         public DbSet<Album> Albums { get; set; }
         public DbSet<Artist> Artists { get; set; }
         public DbSet<Genre> Genres { get; set; }
-        public DbSet<GenreArtist> GenreArtists { get; set; }
+        //public DbSet<GenreArtist> GenreArtists { get; set; }
         public DbSet<GenreTrack> GenreTracks { get; set; }
         public DbSet<Listener> Listeners { get; set; }
         public DbSet<ListenerArtist> ListenerArtists { get; set; }

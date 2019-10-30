@@ -86,7 +86,7 @@ namespace Capstone.Controllers
             for(int i = 0; i < 30; i++)
             {
                 var genre = genres[Randomness.RandomInt(0, genres.Count)];
-                var artist = await SingleHttpClientInstanceController.SpotifySearchForTopArtistInGenre(genre, currentListener);
+                var artist = await SingleHttpClientInstanceController.SpotifySearchForArtistInGenre(genre, currentListener);
                 if (artist != null && 
                     artists.FirstOrDefault(a=>a.ArtistSpotifyId == artist.ArtistSpotifyId) is null)
                 {

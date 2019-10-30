@@ -15,7 +15,7 @@ namespace Capstone.Models
         public double Popularity { get; set; }
         public bool Liked { get; set; }
         public bool Disliked { get; set; }
-        //public virtual IList<Genre> ArtistGenres { get; set; }
+        public virtual IList<Genre> ArtistGenres { get; set; }
         //public virtual IList<Listener> Fans { get; set; }
 
     }

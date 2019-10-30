@@ -14,7 +14,7 @@ namespace Capstone.Models
         public string GenreName { get; set; }
         public string GenreSpotifyName { get; set; }
         //public virtual IList<Listener> GenreListeners { get; set; }
-        //public virtual IList<Artist> GenreArtists { get; set; }
+        public virtual IList<Artist> GenreArtists { get; set; }
         //public virtual IList<Track> GenreTracks { get; set; }
         public int? ParentGenreId { get; set; }
         public virtual Genre ParentGenre { get; set; }

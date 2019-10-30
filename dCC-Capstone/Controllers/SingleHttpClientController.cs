@@ -65,13 +65,14 @@ namespace Capstone.Controllers
             return token;
         }
 
-        public async static Task<Artist> SpotifySearchForTopArtistInGenre(Genre genre, Listener listener)
+        public async static Task<Artist> SpotifySearchForArtistInGenre(Genre genre, Listener listener)
         {
             if (genre is null || listener is null)
             {
                 return null;
             }
-            string url = $"https://api.spotify.com/v1/search?q=genre:{genre.GenreSpotifyName}&type=artist&limit=1";
+            string offset = Randomness.RandomInt(0, 100).ToString();
+            string url = $"https://api.spotify.com/v1/search?q=genre:{genre.GenreSpotifyName}&type=artist&offset={offset}&limit=1";
 
             var response = await SendSpotifyHttpRequest(url, "GET", listener);
             var jsonResponse = await response.Content.ReadAsStringAsync();
@@ -79,7 +80,17 @@ namespace Capstone.Controllers
             try
             {
                 var artistItem = artistsRootobject.artists.items[0];
-                Artist artist = new Artist() { ArtistName = artistItem.name, ArtistSpotifyId = artistItem.uri, Popularity = artistItem.popularity };
+                List<Genre> artistGenres = new List<Genre>();
+                for (int i = 0; i < artistItem.genres.Length; i++)
+                {
+                    artistGenres.Add(new Genre() { GenreSpotifyName = artistItem.genres[i] });
+                }
+                
+                Artist artist = new Artist() {
+                    ArtistName = artistItem.name,
+                    ArtistSpotifyId = artistItem.uri,
+                    Popularity = artistItem.popularity,
+                    ArtistGenres = artistGenres };
 
                 return artist;
             }

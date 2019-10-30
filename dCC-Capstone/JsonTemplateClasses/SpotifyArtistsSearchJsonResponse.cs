@@ -26,7 +26,7 @@ namespace Capstone
         public class Item
         {
             public External_Urls external_urls { get; set; }
-            public object[] genres { get; set; }
+            public string[] genres { get; set; }
             public string href { get; set; }
             public string id { get; set; }
             public Image[] images { get; set; }
