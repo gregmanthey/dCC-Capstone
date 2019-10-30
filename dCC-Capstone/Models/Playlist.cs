@@ -11,13 +11,23 @@ namespace Capstone.Models
     {
         [Key]
         public int PlaylistId { get; set; }
+        [Display(Name = "Private")]
+        public bool IsPrivate { get; set; }
+        [Display(Name = "Playlist Name")]
         public string PlaylistName { get; set; }
+        [Display(Name = "Playlist Mood")]
         public Mood PlaylistMood { get; set; }
+        [Display(Name = "Genre Preference")]
         [Range(0,100)]
         public int GenreWeightPercentage { get; set; }
+        [Display(Name = "Popularity Preference")]
         [Range(0, 100)]
         public int PopularityWeightPercentage { get; set; }
 
+        [Display(Name = "Allow only tracks with High Dynamic Range")]
+        public bool DynamicTracksOnly { get; set; }
+
+        [Display(Name = "")]
         [ForeignKey("Listener")]
         public int CreatedBy { get; set; }
         public Listener Listener { get; set; }

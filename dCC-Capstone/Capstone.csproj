@@ -331,6 +331,7 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="JsonTemplateClasses\SpotifyTrackRecommendationsJsonResponse.cs" />
     <Compile Include="Keys.cs" />
     <Compile Include="Migrations\201910300230263_init.cs" />
     <Compile Include="Migrations\201910300230263_init.Designer.cs">
@@ -347,6 +348,10 @@
     <Compile Include="Migrations\201910301318121_AddArtistUrl.cs" />
     <Compile Include="Migrations\201910301318121_AddArtistUrl.Designer.cs">
       <DependentUpon>201910301318121_AddArtistUrl.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201910301558340_PlaylistUpdate.cs" />
+    <Compile Include="Migrations\201910301558340_PlaylistUpdate.Designer.cs">
+      <DependentUpon>201910301558340_PlaylistUpdate.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
@@ -561,6 +566,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201910301318121_AddArtistUrl.resx">
       <DependentUpon>201910301318121_AddArtistUrl.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201910301558340_PlaylistUpdate.resx">
+      <DependentUpon>201910301558340_PlaylistUpdate.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

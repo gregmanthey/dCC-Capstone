@@ -40,7 +40,7 @@ namespace Capstone.Controllers
                 throw new Exception("Error: state returned from Spotify is not correct");
             }
             string url = "https://accounts.spotify.com/api/token";
-            
+
             //httpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
 
             var parameters = new Dictionary<string, string>();
@@ -85,14 +85,16 @@ namespace Capstone.Controllers
                 {
                     artistGenres.Add(new Genre() { GenreSpotifyName = artistItem.genres[i] });
                 }
-                
-                Artist artist = new Artist() {
+
+                Artist artist = new Artist()
+                {
                     ArtistName = artistItem.name,
                     ArtistSpotifyId = artistItem.id,
                     Popularity = artistItem.popularity,
                     ArtistGenres = artistGenres,
                     ArtistImageUrl = artistItem.images[0].url,
-                    ArtistSpotifyUrl = artistItem.external_urls.spotify };
+                    ArtistSpotifyUrl = artistItem.external_urls.spotify
+                };
 
                 return artist;
             }
@@ -100,6 +102,48 @@ namespace Capstone.Controllers
             {
                 return null;
             }
+        }
+
+        public async static Task<Artist> SpotifySearchForRecommendedTracks(Listener listener, Mood mood = null, List<Genre> genres = null, List<Artist> artists = null, List<Track> tracks = null)
+        {
+            if (listener is null)
+            {
+                throw new Exception("Error: Authenticated listener is required to make API call.");
+                return null;
+            }
+            return null;
+
+            //string offset = Randomness.RandomInt(0, 100).ToString();
+            //string url = $"https://api.spotify.com/v1/search?q=genre:{genre.GenreSpotifyName}&type=artist&offset={offset}&limit=1";
+
+            //var response = await SendSpotifyHttpRequest(url, "GET", listener);
+            //var jsonResponse = await response.Content.ReadAsStringAsync();
+            //var artistsRootobject = JsonConvert.DeserializeObject<SpotifyArtistsSearchJsonResponse.Rootobject>(jsonResponse);
+            //try
+            //{
+            //    var artistItem = artistsRootobject.artists.items[0];
+            //    List<Genre> artistGenres = new List<Genre>();
+            //    for (int i = 0; i < artistItem.genres.Length; i++)
+            //    {
+            //        artistGenres.Add(new Genre() { GenreSpotifyName = artistItem.genres[i] });
+            //    }
+
+            //    Artist artist = new Artist()
+            //    {
+            //        ArtistName = artistItem.name,
+            //        ArtistSpotifyId = artistItem.id,
+            //        Popularity = artistItem.popularity,
+            //        ArtistGenres = artistGenres,
+            //        ArtistImageUrl = artistItem.images[0].url,
+            //        ArtistSpotifyUrl = artistItem.external_urls.spotify
+            //    };
+
+            //    return artist;
+            //}
+            //catch (Exception)
+            //{
+            //    return null;
+            //}
         }
 
         public async static Task<IList<Genre>> SpotifyGenerateGenreSeeds(Listener listener)
@@ -139,7 +183,7 @@ namespace Capstone.Controllers
                     var combinedId = Convert.ToBase64String(Encoding.UTF8.GetBytes(Keys.SpotifyClientId + ":" + Keys.SpotifyClientSecret));
                     httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Basic", combinedId);
                     response = await httpClient.PostAsync(uri, new FormUrlEncodedContent(postParameters));
-                        break;
+                    break;
                 default:
                     return null;
             }

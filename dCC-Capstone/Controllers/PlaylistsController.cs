@@ -56,9 +56,11 @@ namespace Capstone.Controllers
         {
             if (ModelState.IsValid)
             {
-                db.Playlists.Add(playlist);
+                //Spotify Recommendations API call, pass in mood, weighted randomized genres/artists/tracks seed (combined max total of 5), weighted popularity range
+
+                var playlistInDb = db.Playlists.Add(playlist);
                 await db.SaveChangesAsync();
-                return RedirectToAction("Index");
+                return RedirectToAction("Details", new { id = playlistInDb.PlaylistId});
             }
 
             ViewBag.CreatedBy = new SelectList(db.Listeners, "ListenerId", "ScreenName", playlist.CreatedBy);
