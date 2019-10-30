@@ -102,8 +102,9 @@ namespace Capstone.Controllers
             var listenerInDb = GetCurrentListener();
             foreach (var artist in artists)
             {
-                if (artist.Liked)
+                if (artist.Checked)
                 {
+                    artist.Checked = false;
                     Artist artistInDb = db.Artists.FirstOrDefault(a => a.ArtistSpotifyId == artist.ArtistSpotifyId);
 
                     if (artistInDb is null)

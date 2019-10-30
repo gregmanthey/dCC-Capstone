@@ -90,7 +90,8 @@ namespace Capstone.Controllers
                     ArtistName = artistItem.name,
                     ArtistSpotifyId = artistItem.uri,
                     Popularity = artistItem.popularity,
-                    ArtistGenres = artistGenres };
+                    ArtistGenres = artistGenres,
+                    ArtistImageUrl = artistItem.images[0].url };
 
                 return artist;
             }
