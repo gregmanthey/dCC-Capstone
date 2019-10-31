@@ -5,7 +5,7 @@ using System.Web;
 
 namespace Capstone.JsonTemplateClasses
 {
-    public class SpotifyTrackRecommendationsJsonResponse
+    public class SpotifyRecommendedTracksJsonResponse
     {
 
         public class Rootobject

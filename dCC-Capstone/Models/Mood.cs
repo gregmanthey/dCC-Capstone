@@ -15,15 +15,20 @@ namespace Capstone.Models
 
         public double MoodEnergyMinimum { get; set; }
         public double MoodEnergyMaximum { get; set; }
+        public double MoodEnergyTarget { get; set; }
         public double MoodDanceabilityMinimum { get; set; }
         public double MoodDanceabilityMaximum { get; set; }
+        public double MoodDanceabilityTarget { get; set; }
 
         public double MoodLoudnessMinimum { get; set; }
         public double MoodLoudnessMaximum { get; set; }
+        public double MoodLoudnessTarget { get; set; }
         public double MoodTempoMinimum { get; set; }
         public double MoodTempoMaximum { get; set; }
-        public double ValenceMinimum { get; set; }
-        public double ValenceMaximum { get; set; }
-        public bool IsInMajorKeyMood { get; set; }
+        public double MoodTempoTarget { get; set; }
+        public double MoodValenceMinimum { get; set; }
+        public double MoodValenceMaximum { get; set; }
+        public double MoodValenceTarget { get; set; }
+        public int IsInMajorKeyMood { get; set; }
     }
 }
