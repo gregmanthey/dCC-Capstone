@@ -331,6 +331,7 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="JsonTemplateClasses\SpotifyArtistTopTracksJsonResponse.cs" />
     <Compile Include="JsonTemplateClasses\SpotifyRecommendedTracksJsonResponse.cs" />
     <Compile Include="Keys.cs" />
     <Compile Include="Migrations\201910300230263_init.cs" />
@@ -356,6 +357,14 @@
     <Compile Include="Migrations\201910310042084_MoodAndTrackUpdate.cs" />
     <Compile Include="Migrations\201910310042084_MoodAndTrackUpdate.Designer.cs">
       <DependentUpon>201910310042084_MoodAndTrackUpdate.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201910311207044_MoodProperties.cs" />
+    <Compile Include="Migrations\201910311207044_MoodProperties.Designer.cs">
+      <DependentUpon>201910311207044_MoodProperties.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201911010233142_AddArtistSongPreview.cs" />
+    <Compile Include="Migrations\201911010233142_AddArtistSongPreview.Designer.cs">
+      <DependentUpon>201911010233142_AddArtistSongPreview.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
@@ -576,6 +585,12 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201910310042084_MoodAndTrackUpdate.resx">
       <DependentUpon>201910310042084_MoodAndTrackUpdate.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201910311207044_MoodProperties.resx">
+      <DependentUpon>201910311207044_MoodProperties.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201911010233142_AddArtistSongPreview.resx">
+      <DependentUpon>201911010233142_AddArtistSongPreview.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

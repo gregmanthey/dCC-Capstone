@@ -81,6 +81,7 @@ namespace Capstone.Controllers
             try
             {
                 var artistItem = artistsRootobject.artists.items[0];
+                string songPreviewUrl = await GetArtistTopTrackPreviewUrl(listener, artistItem.id);
                 List<Genre> artistGenres = new List<Genre>();
                 for (int i = 0; i < artistItem.genres.Length; i++)
                 {
@@ -94,8 +95,10 @@ namespace Capstone.Controllers
                     Popularity = artistItem.popularity,
                     ArtistGenres = artistGenres,
                     ArtistImageUrl = artistItem.images[0].url,
-                    ArtistSpotifyUrl = artistItem.external_urls.spotify
+                    ArtistSpotifyUrl = artistItem.external_urls.spotify,
+                    ArtistTopTrackPreviewUrl = songPreviewUrl
                 };
+
 
                 return artist;
             }
@@ -104,8 +107,18 @@ namespace Capstone.Controllers
                 return null;
             }
         }
+        public async static Task<string> GetArtistTopTrackPreviewUrl(Listener listener, string artistSpotifyId)
+        {
+            string url = $"https://api.spotify.com/v1/artists/{artistSpotifyId}/top-tracks?country=US";
+            var content = await SendSpotifyHttpRequest(url, "GET", listener);
+            var jsonResponse = await content.Content.ReadAsStringAsync();
+            return JsonConvert.DeserializeObject<SpotifyArtistTopTracksJsonResponse.Rootobject>(jsonResponse).tracks[0].preview_url;
+        }
 
-        public async static Task<List<Track>> SpotifySearchForRecommendedTracks(Listener listener, Playlist playlist, Mood mood = null, List<Genre> genres = null, List<Artist> artists = null, List<Track> tracks = null)
+
+        
+
+        public async static Task<List<Track>> SpotifySearchForRecommendedTracks(Listener listener, Playlist playlist, int popularityTarget, Mood mood = null, List<Genre> genres = null, List<Artist> artists = null, List<Track> tracks = null)
         {
             if (listener is null)
             {
@@ -127,6 +140,18 @@ namespace Capstone.Controllers
                 urlBuilder.Append("&min_danceability=" + mood.MoodDanceabilityMinimum.ToString());
                 urlBuilder.Append("&max_danceability=" + mood.MoodDanceabilityMaximum.ToString());
                 urlBuilder.Append("&target_danceability=" + mood.MoodDanceabilityTarget.ToString());
+                urlBuilder.Append("&min_acousticness=" + mood.MoodAcousticnessMinimum.ToString());
+                urlBuilder.Append("&max_acousticness=" + mood.MoodAcousticnessMaximum.ToString());
+                urlBuilder.Append("&target_acousticness=" + mood.MoodAcousticnessTarget.ToString());
+                urlBuilder.Append("&min_speechiness=" + mood.MoodSpeechinessMinimum.ToString());
+                urlBuilder.Append("&max_speechiness=" + mood.MoodSpeechinessMaximum.ToString());
+                urlBuilder.Append("&target_speechiness=" + mood.MoodSpeechinessTarget.ToString());
+                urlBuilder.Append("&min_instrumentalness=" + mood.MoodInstrumentalnessMinimum.ToString());
+                urlBuilder.Append("&max_instrumentalness=" + mood.MoodInstrumentalnessMaximum.ToString());
+                urlBuilder.Append("&target_instrumentalness=" + mood.MoodInstrumentalnessTarget.ToString());
+                urlBuilder.Append("&min_liveness=" + mood.MoodLivenessMinimum.ToString());
+                urlBuilder.Append("&max_liveness=" + mood.MoodLivenessMaximum.ToString());
+                urlBuilder.Append("&target_liveness=" + mood.MoodLivenessTarget.ToString());
                 //urlBuilder.Append("&min_loudness=" + mood.MoodLoudnessMinimum.ToString());
                 //urlBuilder.Append("&max_loudness=" + mood.MoodLoudnessMaximum.ToString());
                 urlBuilder.Append("&target_mode=" + mood.IsInMajorKeyMood.ToString());

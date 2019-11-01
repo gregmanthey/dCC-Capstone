@@ -83,7 +83,7 @@ namespace Capstone.Controllers
                 await SpotifyInteractionController.SpotifyGenerateGenreSeeds(currentListener);
             }
             genres.AddRange(db.Genres.ToList());
-            for(int i = 0; i < 30; i++)
+            for(int i = 0; i < 15; i++)
             {
                 var genre = genres[Randomness.RandomInt(0, genres.Count)];
                 var artist = await SpotifyInteractionController.SpotifySearchForArtistInGenre(genre, currentListener);

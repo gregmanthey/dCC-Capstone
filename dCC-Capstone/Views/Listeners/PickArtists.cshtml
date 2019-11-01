@@ -1,7 +1,7 @@
 ﻿@model List<Capstone.Models.Artist>
 
 @{
-    ViewBag.Title = "PickArtists";
+    ViewBag.Title = "Pick Artists";
 }
 
 <h2>PickArtists</h2>
@@ -12,39 +12,43 @@
         @for (int i = 0; i < Model.Count(); i++)
         {
 
-            <div class="card text-center mx-auto my-1" style="width:18rem">
-                <a target="_blank" rel="noopener nofollow noreferrer" href="@Model[i].ArtistSpotifyUrl" >
-                    <img class="card-img-top" src="@Model[i].ArtistImageUrl" alt="@Model[i].ArtistName">
-                    </a>
-                    <div class="card-body">
-                        @Html.CheckBoxFor(m => Model[i].Checked)<br />
-                        <a target="_blank" rel="noopener nofollow noreferrer" href="@Model[i].ArtistSpotifyUrl" class="card-title h5">@Model[i].ArtistName</a>
-                        <p class="card-text">
-                            <b>Popularity:</b> @Model[i].Popularity/100<br />
-                            <b>Genres:</b><br />
-                            @for (int j = 0; j < 3 && j < Model[i].ArtistGenres.Count(); j++)
-                            {
-                                <a target="_blank" rel="noopener nofollow noreferrer" href="https://duckduckgo.com/?q=@Model[i].ArtistGenres[j].GenreSpotifyName">
-                                    @Model[i].ArtistGenres[j].GenreSpotifyName
-                            </a>
-                            <br />
-                        }
-                        </p>
-                    </div>
-</div>
+        <div class="card text-center mx-auto my-1" style="width:19rem">
+            <a target="_blank" rel="noopener nofollow noreferrer" href="@Model[i].ArtistSpotifyUrl">
+                <img class="card-img-top" src="@Model[i].ArtistImageUrl" alt="@Model[i].ArtistName">
+            </a>
+            <audio controls>
+                <source src="@Model[i].ArtistTopTrackPreviewUrl" type="audio/ogg">
+            </audio>
+            <div class="card-body">
+                @Html.CheckBoxFor(m => Model[i].Checked)<br />
+                <a target="_blank" rel="noopener nofollow noreferrer" href="@Model[i].ArtistSpotifyUrl" class="card-title h5">@Model[i].ArtistName</a>
+                <p class="card-text">
+                    <b>Popularity:</b> @Model[i].Popularity/100<br />
+                    <b>Genres:</b><br />
+                    @for (int j = 0; j < 3 && j < Model[i].ArtistGenres.Count(); j++)
+                    {
+                        <a target="_blank" rel="noopener nofollow noreferrer" href="https://duckduckgo.com/?q=@Model[i].ArtistGenres[j].GenreSpotifyName">
+                            @Model[i].ArtistGenres[j].GenreSpotifyName
+                        </a>
+                        <br />
+                    }
+                </p>
+            </div>
+        </div>
             @Html.HiddenFor(modelItem => Model[i].ArtistGenres)
             @Html.HiddenFor(modelItem => Model[i].ArtistName)
             @Html.HiddenFor(modelItem => Model[i].Popularity)
             @Html.HiddenFor(modelItem => Model[i].ArtistId)
             @Html.HiddenFor(modelItem => Model[i].ArtistSpotifyId)
             @Html.HiddenFor(modelItem => Model[i].ArtistImageUrl)
+            @Html.HiddenFor(modelItem => Model[i].ArtistSpotifyUrl)
             <br />
         }
     </div>
     <div class="row">
-        <div class="form-group">
-            <div class="col-md-offset-2 col-md-10">
-                <input type="submit" value="Submit liked artists" class="btn btn-default" />
+        <div class="form-group mx-auto">
+            <div class="col-2 text-center">
+                <input type="submit" value="Submit liked artists" class="btn btn-lg btn-primary" />
             </div>
         </div>
     </div>

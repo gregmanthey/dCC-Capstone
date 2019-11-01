@@ -8,6 +8,7 @@ using System.Net;
 using System.Web;
 using System.Web.Mvc;
 using Capstone.Models;
+using Microsoft.AspNet.Identity;
 
 namespace Capstone.Controllers
 {
@@ -56,6 +57,8 @@ namespace Capstone.Controllers
         {
             if (ModelState.IsValid)
             {
+                var userGuid = User.Identity.GetUserId();
+                var currentListener = db.Listeners.FirstOrDefault(l => l.UserGuid == userGuid);
                 //Spotify Recommendations API call, pass in mood, weighted randomized genres/artists/tracks seed (combined max total of 5), weighted popularity range
 
                 var playlistInDb = db.Playlists.Add(playlist);

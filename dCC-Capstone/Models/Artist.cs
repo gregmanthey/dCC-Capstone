@@ -14,6 +14,7 @@ namespace Capstone.Models
         public string ArtistSpotifyUrl { get; set; }
         public string ArtistName { get; set; }
         public string ArtistImageUrl { get; set; }
+        public string ArtistTopTrackPreviewUrl { get; set; }
         public double Popularity { get; set; }
         public bool Checked { get; set; }
         public virtual IList<Genre> ArtistGenres { get; set; }

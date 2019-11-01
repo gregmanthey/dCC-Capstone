@@ -16,6 +16,18 @@ namespace Capstone.Models
         public double MoodEnergyMinimum { get; set; }
         public double MoodEnergyMaximum { get; set; }
         public double MoodEnergyTarget { get; set; }
+        public double MoodAcousticnessMinimum { get; set; }
+        public double MoodAcousticnessMaximum { get; set; }
+        public double MoodAcousticnessTarget { get; set; }
+        public double MoodSpeechinessMinimum { get; set; }
+        public double MoodSpeechinessMaximum { get; set; }
+        public double MoodSpeechinessTarget { get; set; }
+        public double MoodInstrumentalnessMinimum { get; set; }
+        public double MoodInstrumentalnessMaximum { get; set; }
+        public double MoodInstrumentalnessTarget { get; set; }
+        public double MoodLivenessMinimum { get; set; }
+        public double MoodLivenessMaximum { get; set; }
+        public double MoodLivenessTarget { get; set; }
         public double MoodDanceabilityMinimum { get; set; }
         public double MoodDanceabilityMaximum { get; set; }
         public double MoodDanceabilityTarget { get; set; }
