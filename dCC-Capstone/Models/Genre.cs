@@ -11,13 +11,20 @@ namespace Capstone.Models
     {
         [Key]
         public int GenreId { get; set; }
+
+        [Display(Name = "Genre Name")]
         public string GenreName { get; set; }
+
+        [Display(Name = "Genre Spotify Name")]
         public string GenreSpotifyName { get; set; }
-        //public virtual IList<Listener> GenreListeners { get; set; }
-        public virtual IList<Artist> GenreArtists { get; set; }
-        //public virtual IList<Track> GenreTracks { get; set; }
-        public int? ParentGenreId { get; set; }
-        public virtual Genre ParentGenre { get; set; }
-        public virtual IList<Genre> Children { get; set; }
+
+        [Display(Name = "Genre Listeners")]
+        public IList<Listener> GenreListeners { get; set; }
+
+        [Display(Name = "Genre Artists")]
+        public IList<Artist> GenreArtists { get; set; }
+
+        [Display(Name = "Genre Albums")]
+        public IList<Track> GenreAlbums { get; set; }
     }
 }

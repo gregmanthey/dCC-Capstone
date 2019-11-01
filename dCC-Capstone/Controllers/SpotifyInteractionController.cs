@@ -92,11 +92,12 @@ namespace Capstone.Controllers
                 {
                     ArtistName = artistItem.name,
                     ArtistSpotifyId = artistItem.id,
-                    Popularity = artistItem.popularity,
+                    ArtistPopularity = artistItem.popularity,
                     ArtistGenres = artistGenres,
                     ArtistImageUrl = artistItem.images[0].url,
                     ArtistSpotifyUrl = artistItem.external_urls.spotify,
-                    ArtistTopTrackPreviewUrl = songPreviewUrl
+                    ArtistTopTrackPreviewUrl = songPreviewUrl,
+                    SearchedGenre = genre.GenreSpotifyName
                 };
 
 
@@ -116,93 +117,164 @@ namespace Capstone.Controllers
         }
 
 
-        
+        public async static Task<Object> GetTrackDetailsFromSpotify(Listener listener, string trackSpotifyId)
+        {
+            string url = "https://api.spotify.com/v1/recommendations/available-genre-seeds";
+            var content = await SendSpotifyHttpRequest(url, "GET", listener);
+            var jsonResponse = await content.Content.ReadAsStringAsync();
+            var genreStrings = JsonConvert.DeserializeObject<SpotifyGenresJsonResponse.Rootobject>(jsonResponse).genres.ToList();
+            if (!db.Genres.Any())
+            {
+                foreach (var genre in genreStrings)
+                {
+                    Genre newGenre = new Genre { GenreSpotifyName = genre };
+                    db.Genres.Add(newGenre);
+                }
+                db.SaveChanges();
+            }
+            var genres = new List<Genre>(db.Genres.ToList());
+            return genres;
+        }
 
-        public async static Task<List<Track>> SpotifySearchForRecommendedTracks(Listener listener, Playlist playlist, int popularityTarget, Mood mood = null, List<Genre> genres = null, List<Artist> artists = null, List<Track> tracks = null)
+        public async static Task<Playlist> SpotifySearchForRecommendedTracks(Listener listener, Playlist playlist)
         {
             if (listener is null)
             {
                 throw new Exception("Error: Authenticated listener is required to make API call.");
             }
+            string trackLimitNumber = "82";
+            StringBuilder urlBuilder = new StringBuilder($"https://api.spotify.com/v1/recommendations");
+            urlBuilder.Append("?limit=" + trackLimitNumber);
+            urlBuilder.Append("&target_popularity=" + playlist.PopularityTarget);
+            urlBuilder.Append("&market=US");
 
-            StringBuilder urlBuilder = new StringBuilder("https://api.spotify.com/v1/recommendations?limit=50");
-            if (mood != null)
+            if (listener.ListenerGenres.Count > 0)
             {
-                urlBuilder.Append("&min_valence=" + mood.MoodValenceMinimum.ToString());
-                urlBuilder.Append("&max_valence=" + mood.MoodValenceMinimum.ToString());
-                urlBuilder.Append("&target_valence=" + mood.MoodValenceTarget.ToString());
-                urlBuilder.Append("&min_tempo=" + mood.MoodTempoMinimum.ToString());
-                urlBuilder.Append("&max_tempo=" + mood.MoodTempoMaximum.ToString());
-                urlBuilder.Append("&target_tempo=" + mood.MoodTempoTarget.ToString());
-                urlBuilder.Append("&min_energy=" + mood.MoodEnergyMinimum.ToString());
-                urlBuilder.Append("&max_energy=" + mood.MoodEnergyMaximum.ToString());
-                urlBuilder.Append("&target_energy=" + mood.MoodEnergyTarget.ToString());
-                urlBuilder.Append("&min_danceability=" + mood.MoodDanceabilityMinimum.ToString());
-                urlBuilder.Append("&max_danceability=" + mood.MoodDanceabilityMaximum.ToString());
-                urlBuilder.Append("&target_danceability=" + mood.MoodDanceabilityTarget.ToString());
-                urlBuilder.Append("&min_acousticness=" + mood.MoodAcousticnessMinimum.ToString());
-                urlBuilder.Append("&max_acousticness=" + mood.MoodAcousticnessMaximum.ToString());
-                urlBuilder.Append("&target_acousticness=" + mood.MoodAcousticnessTarget.ToString());
-                urlBuilder.Append("&min_speechiness=" + mood.MoodSpeechinessMinimum.ToString());
-                urlBuilder.Append("&max_speechiness=" + mood.MoodSpeechinessMaximum.ToString());
-                urlBuilder.Append("&target_speechiness=" + mood.MoodSpeechinessTarget.ToString());
-                urlBuilder.Append("&min_instrumentalness=" + mood.MoodInstrumentalnessMinimum.ToString());
-                urlBuilder.Append("&max_instrumentalness=" + mood.MoodInstrumentalnessMaximum.ToString());
-                urlBuilder.Append("&target_instrumentalness=" + mood.MoodInstrumentalnessTarget.ToString());
-                urlBuilder.Append("&min_liveness=" + mood.MoodLivenessMinimum.ToString());
-                urlBuilder.Append("&max_liveness=" + mood.MoodLivenessMaximum.ToString());
-                urlBuilder.Append("&target_liveness=" + mood.MoodLivenessTarget.ToString());
-                //urlBuilder.Append("&min_loudness=" + mood.MoodLoudnessMinimum.ToString());
-                //urlBuilder.Append("&max_loudness=" + mood.MoodLoudnessMaximum.ToString());
-                urlBuilder.Append("&target_mode=" + mood.IsInMajorKeyMood.ToString());
+                urlBuilder.Append("&seed_genres=");
+                bool prependComma = false;
+                for(int i = 0; i < 5 && i < listener.ListenerGenres.Count; i++)
+                {
+                    int randomIndex = Randomness.RandomInt(0, listener.ListenerGenres.Count);
+                    if (prependComma)
+                    {
+                        urlBuilder.Append(",");
+                    }
+                    urlBuilder.Append(listener.ListenerGenres[randomIndex].GenreSpotifyName);
+                    prependComma = true;
+                }
+            }
+
+            else if (listener.ListenerArtists.Count > 0)
+            {
+                urlBuilder.Append("&seed_artists=");
+                bool prependComma = false;
+                for (int i = 0; i < 5 && i < listener.ListenerArtists.Count; i++)
+                {
+                    if (prependComma)
+                    {
+                        urlBuilder.Append(",");
+                    }
+                    urlBuilder.Append(listener.ListenerArtists[i].ArtistSpotifyId);
+                    prependComma = true;
+                }
+            }
+
+            else if (listener.ListenerTracks.Count > 0)
+            {
+                urlBuilder.Append("&seed_tracks=");
+                bool prependComma = false;
+                for (int i = 0; i < 5 && i < listener.ListenerTracks.Count; i++)
+                {
+                    if (prependComma)
+                    {
+                        urlBuilder.Append(",");
+                    }
+                    urlBuilder.Append(listener.ListenerTracks[i].TrackSpotifyId);
+                    prependComma = true;
+                }
+            }
+
+            else
+            {
+                Console.WriteLine("Error, we need to have a liked Artist, Genre, or Track to generate a playlist");
+                return null;
+            }
+
+            
+            if (playlist.Mood != null)
+            {
+                //urlBuilder.Append("&min_valence=" + playlist.Mood.MoodValenceMinimum.ToString());
+                //urlBuilder.Append("&max_valence=" + playlist.Mood.MoodValenceMaximum.ToString());
+                urlBuilder.Append("&target_valence=" + playlist.Mood.MoodValenceTarget.ToString());
+                //urlBuilder.Append("&min_tempo=" + playlist.Mood.MoodTempoMinimum.ToString());
+                //urlBuilder.Append("&max_tempo=" + playlist.Mood.MoodTempoMaximum.ToString());
+                urlBuilder.Append("&target_tempo=" + playlist.Mood.MoodTempoTarget.ToString());
+                //urlBuilder.Append("&min_energy=" + playlist.Mood.MoodEnergyMinimum.ToString());
+                //urlBuilder.Append("&max_energy=" + playlist.Mood.MoodEnergyMaximum.ToString());
+                urlBuilder.Append("&target_energy=" + playlist.Mood.MoodEnergyTarget.ToString());
+                //urlBuilder.Append("&min_danceability=" + playlist.Mood.MoodDanceabilityMinimum.ToString());
+                //urlBuilder.Append("&max_danceability=" + playlist.Mood.MoodDanceabilityMaximum.ToString());
+                urlBuilder.Append("&target_danceability=" + playlist.Mood.MoodDanceabilityTarget.ToString());
+                //urlBuilder.Append("&min_acousticness=" + playlist.Mood.MoodAcousticnessMinimum.ToString());
+                //urlBuilder.Append("&max_acousticness=" + playlist.Mood.MoodAcousticnessMaximum.ToString());
+                urlBuilder.Append("&target_acousticness=" + playlist.Mood.MoodAcousticnessTarget.ToString());
+                //urlBuilder.Append("&min_speechiness=" + playlist.Mood.MoodSpeechinessMinimum.ToString());
+                //urlBuilder.Append("&max_speechiness=" + playlist.Mood.MoodSpeechinessMaximum.ToString());
+                urlBuilder.Append("&target_speechiness=" + playlist.Mood.MoodSpeechinessTarget.ToString());
+                //urlBuilder.Append("&min_instrumentalness=" + playlist.Mood.MoodInstrumentalnessMinimum.ToString());
+                //urlBuilder.Append("&max_instrumentalness=" + playlist.Mood.MoodInstrumentalnessMaximum.ToString());
+                urlBuilder.Append("&target_instrumentalness=" + playlist.Mood.MoodInstrumentalnessTarget.ToString());
+                //urlBuilder.Append("&min_liveness=" + playlist.Mood.MoodLivenessMinimum.ToString());
+                //urlBuilder.Append("&max_liveness=" + playlist.Mood.MoodLivenessMaximum.ToString());
+                urlBuilder.Append("&target_liveness=" + playlist.Mood.MoodLivenessTarget.ToString());
+                //urlBuilder.Append("&min_loudness=" + playlist.Mood.MoodLoudnessMinimum.ToString());
+                //urlBuilder.Append("&max_loudness=" + playlist.Mood.MoodLoudnessMaximum.ToString());
+                urlBuilder.Append("&target_mode=" + playlist.Mood.IsInMajorKeyMood.ToString());
             }
             if (playlist.DynamicTracksOnly)
             {
-                urlBuilder.Append("&max_loudness=-14");
-            }
-            
-            if (artists != null)
-            {
-                foreach (var artist in artists)
-                {
-                    urlBuilder.Append("&seed_artist=" + artist.ArtistSpotifyId);
-                }
-            }
-
-            if (tracks != null)
-            {
-                foreach (var track in tracks)
-                {
-                    urlBuilder.Append("&seed_track=" + track.TrackSpotifyId);
-                }
-            }
-
-            if (genres != null)
-            {
-                foreach (var genre in genres)
-                {
-                    urlBuilder.Append("&seed_genre=" + genre.GenreSpotifyName);
-                }
+                urlBuilder.Append("&max_loudness=-16");
             }
 
             string url = urlBuilder.ToString();
             var response = await SendSpotifyHttpRequest(url, "GET", listener);
             var jsonResponse = await response.Content.ReadAsStringAsync();
-            var recommendedTracksObject = JsonConvert.DeserializeObject<SpotifyRecommendedTracksJsonResponse.Rootobject>(jsonResponse).tracks;
+            var recommendedTracks = JsonConvert.DeserializeObject<SpotifyRecommendedTracksJsonResponse.Rootobject>(jsonResponse);
             List<Track> playlistTracks = new List<Track>();
-            foreach (var track in recommendedTracksObject)
+            foreach (var track in recommendedTracks.tracks)
             {
-                playlistTracks.Add(new Track()
+                Track newTrack = new Track()
                 {
                     TrackAlbumSpotifyId = track.album.id,
-                    TrackArtistSpotifyId = track.artists[0].id,
                     TrackSpotifyId = track.id,
                     TrackName = track.name,
                     TrackPopularity = track.popularity
-                }) ;
+                };
+
+                var trackArtist = track.artists[0];
+                    Artist artistInDb = db.Artists.FirstOrDefault(a => a.ArtistSpotifyId == trackArtist.id);
+
+                    if (artistInDb is null)
+                    {
+                        artistInDb = new Artist()
+                        {
+                            ArtistName = trackArtist.name,
+                            ArtistSpotifyId = trackArtist.id,
+                            ArtistSpotifyUrl = trackArtist.external_urls.spotify
+                        };
+                        artistInDb = db.Artists.Add(artistInDb);
+                        db.SaveChanges();
+                    }
+                    
+                    newTrack.TrackArtistId = artistInDb.ArtistId;
+                    
+                    
+                
+                playlistTracks.Add(newTrack);
             }
+            playlist.PlaylistTracks = playlistTracks;
             
-            return playlistTracks;
+            return playlist;
         }
 
         public async static Task<IList<Genre>> SpotifyGenerateGenreSeeds(Listener listener)

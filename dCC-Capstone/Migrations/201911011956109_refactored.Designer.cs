@@ -7,13 +7,13 @@ namespace Capstone.Migrations
     using System.Resources;
     
     [GeneratedCode("EntityFramework.Migrations", "6.2.0-61023")]
-    public sealed partial class RenameArtistLikedToChecked : IMigrationMetadata
+    public sealed partial class refactored : IMigrationMetadata
     {
-        private readonly ResourceManager Resources = new ResourceManager(typeof(RenameArtistLikedToChecked));
+        private readonly ResourceManager Resources = new ResourceManager(typeof(refactored));
         
         string IMigrationMetadata.Id
         {
-            get { return "201910300446213_RenameArtistLikedToChecked"; }
+            get { return "201911011956109_refactored"; }
         }
         
         string IMigrationMetadata.Source

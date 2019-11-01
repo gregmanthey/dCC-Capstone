@@ -4,13 +4,16 @@
     ViewBag.Title = "Pick Artists";
 }
 
-<h2>PickArtists</h2>
+<h2>Select any artists you enjoy</h2>
+<b />
+<p>Submit button is at the bottom</p>
+
 @using (Html.BeginForm())
 {
     @Html.AntiForgeryToken()
-    <div class="row">
-        @for (int i = 0; i < Model.Count(); i++)
-        {
+<div class="row w-auto">
+    @for (int i = 0; i < Model.Count(); i++)
+    {
 
         <div class="card text-center mx-auto my-1" style="width:19rem">
             <a target="_blank" rel="noopener nofollow noreferrer" href="@Model[i].ArtistSpotifyUrl">
@@ -20,10 +23,10 @@
                 <source src="@Model[i].ArtistTopTrackPreviewUrl" type="audio/ogg">
             </audio>
             <div class="card-body">
-                @Html.CheckBoxFor(m => Model[i].Checked)<br />
+                @Html.CheckBoxFor(m => Model[i].ArtistChecked)<br />
                 <a target="_blank" rel="noopener nofollow noreferrer" href="@Model[i].ArtistSpotifyUrl" class="card-title h5">@Model[i].ArtistName</a>
                 <p class="card-text">
-                    <b>Popularity:</b> @Model[i].Popularity/100<br />
+                    <b>Popularity:</b> @Model[i].ArtistPopularity/100<br />
                     <b>Genres:</b><br />
                     @for (int j = 0; j < 3 && j < Model[i].ArtistGenres.Count(); j++)
                     {
@@ -35,16 +38,19 @@
                 </p>
             </div>
         </div>
-            @Html.HiddenFor(modelItem => Model[i].ArtistGenres)
-            @Html.HiddenFor(modelItem => Model[i].ArtistName)
-            @Html.HiddenFor(modelItem => Model[i].Popularity)
-            @Html.HiddenFor(modelItem => Model[i].ArtistId)
-            @Html.HiddenFor(modelItem => Model[i].ArtistSpotifyId)
-            @Html.HiddenFor(modelItem => Model[i].ArtistImageUrl)
-            @Html.HiddenFor(modelItem => Model[i].ArtistSpotifyUrl)
-            <br />
-        }
-    </div>
+        @Html.HiddenFor(modelItem => Model[i].ArtistGenres)
+        @Html.HiddenFor(modelItem => Model[i].ArtistListeners)
+        @Html.HiddenFor(modelItem => Model[i].ArtistName)
+        @Html.HiddenFor(modelItem => Model[i].ArtistPopularity)
+        @Html.HiddenFor(modelItem => Model[i].SearchedGenre)
+        @Html.HiddenFor(modelItem => Model[i].ArtistId)
+        @Html.HiddenFor(modelItem => Model[i].ArtistSpotifyId)
+        @Html.HiddenFor(modelItem => Model[i].ArtistImageUrl)
+        @Html.HiddenFor(modelItem => Model[i].ArtistSpotifyUrl)
+        @Html.HiddenFor(modelItem => Model[i].ArtistTopTrackPreviewUrl)
+        <br />
+    }
+</div>
     <div class="row">
         <div class="form-group mx-auto">
             <div class="col-2 text-center">

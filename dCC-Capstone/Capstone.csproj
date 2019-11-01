@@ -92,9 +92,6 @@
     <Reference Include="Microsoft.AspNetCore.Http.Features, Version=2.2.0.0, Culture=neutral, PublicKeyToken=adb9793829ddae60, processorArchitecture=MSIL">
       <HintPath>packages\Microsoft.AspNetCore.Http.Features.2.2.0\lib\netstandard2.0\Microsoft.AspNetCore.Http.Features.dll</HintPath>
     </Reference>
-    <Reference Include="Microsoft.AspNetCore.Identity, Version=2.2.0.0, Culture=neutral, PublicKeyToken=adb9793829ddae60, processorArchitecture=MSIL">
-      <HintPath>packages\Microsoft.AspNetCore.Identity.2.2.0\lib\netstandard2.0\Microsoft.AspNetCore.Identity.dll</HintPath>
-    </Reference>
     <Reference Include="Microsoft.AspNetCore.WebUtilities, Version=2.2.0.0, Culture=neutral, PublicKeyToken=adb9793829ddae60, processorArchitecture=MSIL">
       <HintPath>packages\Microsoft.AspNetCore.WebUtilities.2.2.0\lib\netstandard2.0\Microsoft.AspNetCore.WebUtilities.dll</HintPath>
     </Reference>
@@ -334,54 +331,29 @@
     <Compile Include="JsonTemplateClasses\SpotifyArtistTopTracksJsonResponse.cs" />
     <Compile Include="JsonTemplateClasses\SpotifyRecommendedTracksJsonResponse.cs" />
     <Compile Include="Keys.cs" />
-    <Compile Include="Migrations\201910300230263_init.cs" />
-    <Compile Include="Migrations\201910300230263_init.Designer.cs">
-      <DependentUpon>201910300230263_init.cs</DependentUpon>
+    <Compile Include="Migrations\201911011956109_refactored.cs" />
+    <Compile Include="Migrations\201911011956109_refactored.Designer.cs">
+      <DependentUpon>201911011956109_refactored.cs</DependentUpon>
     </Compile>
-    <Compile Include="Migrations\201910300446213_RenameArtistLikedToChecked.cs" />
-    <Compile Include="Migrations\201910300446213_RenameArtistLikedToChecked.Designer.cs">
-      <DependentUpon>201910300446213_RenameArtistLikedToChecked.cs</DependentUpon>
+    <Compile Include="Migrations\201911012039133_PlaylistMoodIntNullable.cs" />
+    <Compile Include="Migrations\201911012039133_PlaylistMoodIntNullable.Designer.cs">
+      <DependentUpon>201911012039133_PlaylistMoodIntNullable.cs</DependentUpon>
     </Compile>
-    <Compile Include="Migrations\201910301227555_AddImageUrls.cs" />
-    <Compile Include="Migrations\201910301227555_AddImageUrls.Designer.cs">
-      <DependentUpon>201910301227555_AddImageUrls.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201910301318121_AddArtistUrl.cs" />
-    <Compile Include="Migrations\201910301318121_AddArtistUrl.Designer.cs">
-      <DependentUpon>201910301318121_AddArtistUrl.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201910301558340_PlaylistUpdate.cs" />
-    <Compile Include="Migrations\201910301558340_PlaylistUpdate.Designer.cs">
-      <DependentUpon>201910301558340_PlaylistUpdate.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201910310042084_MoodAndTrackUpdate.cs" />
-    <Compile Include="Migrations\201910310042084_MoodAndTrackUpdate.Designer.cs">
-      <DependentUpon>201910310042084_MoodAndTrackUpdate.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201910311207044_MoodProperties.cs" />
-    <Compile Include="Migrations\201910311207044_MoodProperties.Designer.cs">
-      <DependentUpon>201910311207044_MoodProperties.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201911010233142_AddArtistSongPreview.cs" />
-    <Compile Include="Migrations\201911010233142_AddArtistSongPreview.Designer.cs">
-      <DependentUpon>201911010233142_AddArtistSongPreview.cs</DependentUpon>
+    <Compile Include="Migrations\201911012144088_SingleTrackArtist.cs" />
+    <Compile Include="Migrations\201911012144088_SingleTrackArtist.Designer.cs">
+      <DependentUpon>201911012144088_SingleTrackArtist.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\Album.cs" />
     <Compile Include="Models\Artist.cs" />
-    <Compile Include="Models\ListenerArtist.cs" />
     <Compile Include="Models\Genre.cs" />
-    <Compile Include="Models\ListenerGenre.cs" />
     <Compile Include="Models\IdentityModels.cs" />
     <Compile Include="Models\ManageViewModels.cs" />
     <Compile Include="Models\Listener.cs" />
     <Compile Include="Models\Mood.cs" />
     <Compile Include="Models\Playlist.cs" />
-    <Compile Include="Models\PlaylistTracks.cs" />
     <Compile Include="Models\Track.cs" />
-    <Compile Include="Models\GenreTrack.cs" />
-    <Compile Include="Models\ListenerTrack.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Randomness.cs" />
     <Compile Include="JsonTemplateClasses\SpotifyArtistsSearchJsonResponse.cs" />
@@ -568,29 +540,14 @@
     <Analyzer Include="packages\Microsoft.CodeAnalysis.VersionCheckAnalyzer.2.9.6\analyzers\dotnet\Microsoft.CodeAnalysis.VersionCheckAnalyzer.dll" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Migrations\201910300230263_init.resx">
-      <DependentUpon>201910300230263_init.cs</DependentUpon>
+    <EmbeddedResource Include="Migrations\201911011956109_refactored.resx">
+      <DependentUpon>201911011956109_refactored.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201910300446213_RenameArtistLikedToChecked.resx">
-      <DependentUpon>201910300446213_RenameArtistLikedToChecked.cs</DependentUpon>
+    <EmbeddedResource Include="Migrations\201911012039133_PlaylistMoodIntNullable.resx">
+      <DependentUpon>201911012039133_PlaylistMoodIntNullable.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201910301227555_AddImageUrls.resx">
-      <DependentUpon>201910301227555_AddImageUrls.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201910301318121_AddArtistUrl.resx">
-      <DependentUpon>201910301318121_AddArtistUrl.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201910301558340_PlaylistUpdate.resx">
-      <DependentUpon>201910301558340_PlaylistUpdate.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201910310042084_MoodAndTrackUpdate.resx">
-      <DependentUpon>201910310042084_MoodAndTrackUpdate.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201910311207044_MoodProperties.resx">
-      <DependentUpon>201910311207044_MoodProperties.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201911010233142_AddArtistSongPreview.resx">
-      <DependentUpon>201911010233142_AddArtistSongPreview.cs</DependentUpon>
+    <EmbeddedResource Include="Migrations\201911012144088_SingleTrackArtist.resx">
+      <DependentUpon>201911012144088_SingleTrackArtist.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

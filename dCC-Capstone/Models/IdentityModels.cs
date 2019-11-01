@@ -24,38 +24,11 @@ namespace Capstone.Models
         public DbSet<Album> Albums { get; set; }
         public DbSet<Artist> Artists { get; set; }
         public DbSet<Genre> Genres { get; set; }
-        //public DbSet<GenreArtist> GenreArtists { get; set; }
-        public DbSet<GenreTrack> GenreTracks { get; set; }
         public DbSet<Listener> Listeners { get; set; }
-        public DbSet<ListenerArtist> ListenerArtists { get; set; }
-        public DbSet<ListenerGenre> ListenerGenres { get; set; }
-        public DbSet<ListenerTrack> ListenerTracks { get; set; }
         public DbSet<Mood> Moods { get; set; }
         public DbSet<Playlist> Playlists { get; set; }
-        public DbSet<PlaylistTracks> PlaylistTracks { get; set; }
         public DbSet<Track> Tracks { get; set; }
 
-        protected override void OnModelCreating(DbModelBuilder modelBuilder)
-        {
-            modelBuilder.Entity<Genre>().Property(g => g.GenreId).HasDatabaseGeneratedOption(DatabaseGeneratedOption.Identity);
-
-            modelBuilder.Entity<Genre>().
-              HasOptional(e => e.ParentGenre).
-              WithMany(g => g.Children).
-              HasForeignKey(m => m.ParentGenreId).
-              WillCascadeOnDelete(false);
-            //modelBuilder.Entity<Genre>().
-            //  HasOptional(e => e.Children).
-            //  WithMany().
-            //  HasForeignKey(m => m.ChildGenreId);
-            modelBuilder.Entity<IdentityUserRole>()
-            .HasKey(r => new { r.UserId, r.RoleId })
-            .ToTable("AspNetUserRoles");
-
-            modelBuilder.Entity<IdentityUserLogin>()
-                        .HasKey(l => new { l.LoginProvider, l.ProviderKey, l.UserId })
-                        .ToTable("AspNetUserLogins");
-        }
         public ApplicationDbContext()
             : base("DefaultConnection", throwIfV1Schema: false)
         {

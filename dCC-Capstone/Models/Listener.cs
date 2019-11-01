@@ -11,19 +11,32 @@ namespace Capstone.Models
     {
         [Key]
         public int ListenerId { get; set; }
+
+        [Display(Name = "Screen Name")]
         [Index(IsUnique = true)]
         [MaxLength(30)]
         public string ScreenName { get; set; }
+
+        [Display(Name = "First Name")]
         public string FirstName { get; set; }
+
+        [Display(Name = "Last Name")]
         public string LastName { get; set; }
         public string AccessToken { get; set; }
         public string RefreshToken { get; set; }
+
         [ForeignKey("User")]
         [Index(IsUnique = true)]
         public string UserGuid { get; set; }
         public ApplicationUser User { get; set; }
-        //public virtual IList<Artist> Artists { get; set; }
-        //public virtual IList<Genre> Genres { get; set; }
-        //public virtual IList<Track> Tracks { get; set; }
+
+        [Display(Name = "Listener Artists")]
+        public IList<Artist> ListenerArtists { get; set; }
+
+        [Display(Name = "Listener Genres")]
+        public IList<Genre> ListenerGenres { get; set; }
+
+        [Display(Name = "Listener Tracks")]
+        public IList<Track> ListenerTracks { get; set; }
     }
 }

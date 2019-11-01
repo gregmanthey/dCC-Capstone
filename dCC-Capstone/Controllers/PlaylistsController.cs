@@ -30,7 +30,7 @@ namespace Capstone.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Playlist playlist = await db.Playlists.FindAsync(id);
+            Playlist playlist = await db.Playlists.Include("PlaylistTracks").Include("PlaylistGenres").Include("Mood").FirstOrDefaultAsync(p => p.PlaylistId == id);
             if (playlist == null)
             {
                 return HttpNotFound();
@@ -42,9 +42,12 @@ namespace Capstone.Controllers
         public ActionResult Create()
         {
             ViewBag.Moods = new SelectList(db.Moods, "MoodId", "MoodName");
-            Playlist playlist = new Playlist() {
+
+            Playlist playlist = new Playlist() 
+            {
                 GenreWeightPercentage = 100,
-                PopularityWeightPercentage = 100 };
+                PopularityTarget = 100
+            };
             return View(playlist);
         }
 
@@ -53,21 +56,23 @@ namespace Capstone.Controllers
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Create([Bind(Include = "PlaylistId,PlaylistName,CreatedBy")] Playlist playlist)
+        public async Task<ActionResult> Create(Playlist playlist)
         {
             if (ModelState.IsValid)
             {
-                var userGuid = User.Identity.GetUserId();
-                var currentListener = db.Listeners.FirstOrDefault(l => l.UserGuid == userGuid);
+                if (playlist.PlaylistMood != null)
+                {
+                    playlist.Mood = await db.Moods.FindAsync(playlist.PlaylistMood);
+                }
+                var currentListener = GetCurrentListener();
                 //Spotify Recommendations API call, pass in mood, weighted randomized genres/artists/tracks seed (combined max total of 5), weighted popularity range
-
+                playlist = await SpotifyInteractionController.SpotifySearchForRecommendedTracks(currentListener, playlist);
+                playlist.CreatedBy = currentListener.ListenerId;
                 var playlistInDb = db.Playlists.Add(playlist);
                 await db.SaveChangesAsync();
                 return RedirectToAction("Details", new { id = playlistInDb.PlaylistId});
             }
-
-            ViewBag.CreatedBy = new SelectList(db.Listeners, "ListenerId", "ScreenName", playlist.CreatedBy);
-            return View(playlist);
+            return RedirectToAction("Details", new { id = playlist.PlaylistId });
         }
 
         // GET: Playlists/Edit/5
@@ -136,6 +141,12 @@ namespace Capstone.Controllers
                 db.Dispose();
             }
             base.Dispose(disposing);
+        }
+        
+        private Listener GetCurrentListener()
+        {
+            var userGuid = User.Identity.GetUserId();
+            return db.Listeners.Include("ListenerArtists").Include("ListenerGenres").Include("ListenerTracks").FirstOrDefault(l => l.UserGuid == userGuid);
         }
     }
 }

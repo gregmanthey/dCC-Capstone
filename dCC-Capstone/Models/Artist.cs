@@ -10,15 +10,37 @@ namespace Capstone.Models
     {
         [Key]
         public int ArtistId { get; set; }
+
+        [Display(Name = "Artist Spotify ID")]
         public string ArtistSpotifyId { get; set; }
+
+        [Display(Name = "Artist Spotify URL")]
         public string ArtistSpotifyUrl { get; set; }
+
+        [Display(Name = "Artist Name")]
         public string ArtistName { get; set; }
+
+        [Display(Name = "Artist Image URL")]
         public string ArtistImageUrl { get; set; }
+
+        [Display(Name = "Artist Top Track Preview URL")]
         public string ArtistTopTrackPreviewUrl { get; set; }
-        public double Popularity { get; set; }
-        public bool Checked { get; set; }
-        public virtual IList<Genre> ArtistGenres { get; set; }
-        //public virtual IList<Listener> Fans { get; set; }
+
+        [Display(Name = "Artist Popularity")]
+        public double ArtistPopularity { get; set; }
+        public bool ArtistChecked { get; set; }
+
+        [Display(Name = "Artist Genre")]
+        public string SearchedGenre { get; set; }
+
+        [Display(Name = "Artist Sub-genres")]
+        public IList<Genre> ArtistGenres { get; set; }
+
+        [Display(Name = "Artist Listeners")]
+        public IList<Listener> ArtistListeners { get; set; }
+
+        [Display(Name = "Artist Albums")]
+        public IList<Album> ArtistAlbums { get; set; }
 
     }
 }

@@ -11,27 +11,38 @@ namespace Capstone.Models
     {
         [Key]
         public int PlaylistId { get; set; }
+
         [Display(Name = "Private")]
         public bool IsPrivate { get; set; }
+
         [Display(Name = "Playlist Name")]
         public string PlaylistName { get; set; }
+
+        [ForeignKey("Mood")]
         [Display(Name = "Playlist Mood")]
-        public Mood PlaylistMood { get; set; }
-        [Display(Name = "Genre Preference")]
+        public int? PlaylistMood { get; set; }
+        public Mood Mood { get; set; }
+
+        [Display(Name = "Genre Preference (100 being use my existing genres)")]
         [Range(0,100)]
         public int GenreWeightPercentage { get; set; }
-        [Display(Name = "Popularity Preference")]
+
+        [Display(Name = "Popularity Preference (100 being most popular)")]
         [Range(0, 100)]
-        public int PopularityWeightPercentage { get; set; }
+        public int PopularityTarget { get; set; }
 
         [Display(Name = "Allow only tracks with High Dynamic Range")]
         public bool DynamicTracksOnly { get; set; }
 
-        [Display(Name = "")]
         [ForeignKey("Listener")]
+        [Display(Name = "Created By")]
         public int CreatedBy { get; set; }
         public Listener Listener { get; set; }
-        public virtual IList<Track> PlaylistTracks { get; set; }
-        public virtual IList<Genre> PlaylistGenres { get; set; }
+
+        [Display(Name = "Playlist Tracks")]
+        public IList<Track> PlaylistTracks { get; set; }
+
+        [Display(Name = "Playlist Genres")]
+        public IList<Genre> PlaylistGenres { get; set; }
     }
 }

@@ -99,12 +99,13 @@ namespace Capstone.Controllers
         [HttpPost]
         public ActionResult PickArtists(List<Artist> artists)
         {
+            
             var listenerInDb = GetCurrentListener();
             foreach (var artist in artists)
             {
-                if (artist.Checked)
+                if (artist.ArtistChecked)
                 {
-                    artist.Checked = false;
+                    artist.ArtistChecked = false;
                     Artist artistInDb = db.Artists.FirstOrDefault(a => a.ArtistSpotifyId == artist.ArtistSpotifyId);
 
                     if (artistInDb is null)
@@ -112,22 +113,16 @@ namespace Capstone.Controllers
                         artistInDb = db.Artists.Add(artist);
                         db.SaveChanges();
                     }
-
-                    ListenerArtist listenerArtistInDb = db.ListenerArtists.FirstOrDefault(la => la.Artist.ArtistSpotifyId == artist.ArtistSpotifyId && la.ListenerId == listenerInDb.ListenerId);
-
-                    if (listenerArtistInDb is null)
+                    if (listenerInDb.ListenerArtists.FirstOrDefault(la => la.ArtistSpotifyId == artistInDb.ArtistSpotifyId) is null)
                     {
-                        db.ListenerArtists.Add(new ListenerArtist() { ListenerId = listenerInDb.ListenerId, ArtistId = artistInDb.ArtistId, ArtistLiked = true });
-                    }
-                    else
-                    {
-                        listenerArtistInDb.ArtistLiked = true;
+                        listenerInDb.ListenerArtists.Add(artistInDb);
+                        artistInDb.ArtistListeners.Add(listenerInDb);
                     }
                 }
             }
             db.SaveChanges();
             
-            return RedirectToAction("Index");
+            return RedirectToAction("Index", "Home");
         }
 
         // GET: Listeners/Edit/5
@@ -173,10 +168,10 @@ namespace Capstone.Controllers
                 return View();
             }
         }
-        public Listener GetCurrentListener()
+        private Listener GetCurrentListener()
         {
             string userGuid = User.Identity.GetUserId();
-            return db.Listeners.FirstOrDefault(l => l.UserGuid == userGuid);
+            return db.Listeners.Include("ListenerArtists").Include("ListenerGenres").Include("ListenerTracks").FirstOrDefault(l => l.UserGuid == userGuid);
         }
     }
 }

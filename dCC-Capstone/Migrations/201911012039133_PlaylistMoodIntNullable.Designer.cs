@@ -7,13 +7,13 @@ namespace Capstone.Migrations
     using System.Resources;
     
     [GeneratedCode("EntityFramework.Migrations", "6.2.0-61023")]
-    public sealed partial class AddImageUrls : IMigrationMetadata
+    public sealed partial class PlaylistMoodIntNullable : IMigrationMetadata
     {
-        private readonly ResourceManager Resources = new ResourceManager(typeof(AddImageUrls));
+        private readonly ResourceManager Resources = new ResourceManager(typeof(PlaylistMoodIntNullable));
         
         string IMigrationMetadata.Id
         {
-            get { return "201910301227555_AddImageUrls"; }
+            get { return "201911012039133_PlaylistMoodIntNullable"; }
         }
         
         string IMigrationMetadata.Source

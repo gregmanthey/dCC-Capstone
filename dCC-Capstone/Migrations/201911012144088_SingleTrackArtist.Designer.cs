@@ -7,13 +7,13 @@ namespace Capstone.Migrations
     using System.Resources;
     
     [GeneratedCode("EntityFramework.Migrations", "6.2.0-61023")]
-    public sealed partial class PlaylistUpdate : IMigrationMetadata
+    public sealed partial class SingleTrackArtist : IMigrationMetadata
     {
-        private readonly ResourceManager Resources = new ResourceManager(typeof(PlaylistUpdate));
+        private readonly ResourceManager Resources = new ResourceManager(typeof(SingleTrackArtist));
         
         string IMigrationMetadata.Id
         {
-            get { return "201910301558340_PlaylistUpdate"; }
+            get { return "201911012144088_SingleTrackArtist"; }
         }
         
         string IMigrationMetadata.Source
