@@ -343,6 +343,30 @@
     <Compile Include="Migrations\201911012144088_SingleTrackArtist.Designer.cs">
       <DependentUpon>201911012144088_SingleTrackArtist.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201911012341244_ManyToManyTrackPlaylist.cs" />
+    <Compile Include="Migrations\201911012341244_ManyToManyTrackPlaylist.Designer.cs">
+      <DependentUpon>201911012341244_ManyToManyTrackPlaylist.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201911021717564_MoodTrackNullables.cs" />
+    <Compile Include="Migrations\201911021717564_MoodTrackNullables.Designer.cs">
+      <DependentUpon>201911021717564_MoodTrackNullables.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201911021722143_TrackMajorKeyInt.cs" />
+    <Compile Include="Migrations\201911021722143_TrackMajorKeyInt.Designer.cs">
+      <DependentUpon>201911021722143_TrackMajorKeyInt.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201911021738432_PlaylistTrackCount.cs" />
+    <Compile Include="Migrations\201911021738432_PlaylistTrackCount.Designer.cs">
+      <DependentUpon>201911021738432_PlaylistTrackCount.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201911030308025_TrackListeners.cs" />
+    <Compile Include="Migrations\201911030308025_TrackListeners.Designer.cs">
+      <DependentUpon>201911030308025_TrackListeners.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201911031856122_PlaylistTrackCount1.cs" />
+    <Compile Include="Migrations\201911031856122_PlaylistTrackCount1.Designer.cs">
+      <DependentUpon>201911031856122_PlaylistTrackCount1.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\Album.cs" />
@@ -354,6 +378,7 @@
     <Compile Include="Models\Mood.cs" />
     <Compile Include="Models\Playlist.cs" />
     <Compile Include="Models\Track.cs" />
+    <Compile Include="Models\ViewModels\PlaylistArtistViewModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Randomness.cs" />
     <Compile Include="JsonTemplateClasses\SpotifyArtistsSearchJsonResponse.cs" />
@@ -548,6 +573,24 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201911012144088_SingleTrackArtist.resx">
       <DependentUpon>201911012144088_SingleTrackArtist.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201911012341244_ManyToManyTrackPlaylist.resx">
+      <DependentUpon>201911012341244_ManyToManyTrackPlaylist.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201911021717564_MoodTrackNullables.resx">
+      <DependentUpon>201911021717564_MoodTrackNullables.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201911021722143_TrackMajorKeyInt.resx">
+      <DependentUpon>201911021722143_TrackMajorKeyInt.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201911021738432_PlaylistTrackCount.resx">
+      <DependentUpon>201911021738432_PlaylistTrackCount.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201911030308025_TrackListeners.resx">
+      <DependentUpon>201911030308025_TrackListeners.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201911031856122_PlaylistTrackCount1.resx">
+      <DependentUpon>201911031856122_PlaylistTrackCount1.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

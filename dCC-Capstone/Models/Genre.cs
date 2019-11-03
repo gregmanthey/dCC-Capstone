@@ -19,12 +19,12 @@ namespace Capstone.Models
         public string GenreSpotifyName { get; set; }
 
         [Display(Name = "Genre Listeners")]
-        public IList<Listener> GenreListeners { get; set; }
+        public List<Listener> GenreListeners { get; set; }
 
         [Display(Name = "Genre Artists")]
-        public IList<Artist> GenreArtists { get; set; }
+        public List<Artist> GenreArtists { get; set; }
 
         [Display(Name = "Genre Albums")]
-        public IList<Track> GenreAlbums { get; set; }
+        public List<Track> GenreAlbums { get; set; }
     }
 }

@@ -31,12 +31,12 @@ namespace Capstone.Models
         public ApplicationUser User { get; set; }
 
         [Display(Name = "Listener Artists")]
-        public IList<Artist> ListenerArtists { get; set; }
+        public List<Artist> ListenerArtists { get; set; }
 
         [Display(Name = "Listener Genres")]
-        public IList<Genre> ListenerGenres { get; set; }
+        public List<Genre> ListenerGenres { get; set; }
 
         [Display(Name = "Listener Tracks")]
-        public IList<Track> ListenerTracks { get; set; }
+        public List<Track> ListenerTracks { get; set; }
     }
 }

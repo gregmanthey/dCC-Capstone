@@ -1,4 +1,4 @@
-﻿@model Capstone.Models.Playlist
+﻿@model Capstone.Models.ViewModels.PlaylistArtistViewModel
 
 @{
     ViewBag.Title = "Details";
@@ -7,28 +7,48 @@
 <h2>Details</h2>
 
 <div>
-    <h4>Playlist</h4>
+    <h4>@Model.Playlist.PlaylistName</h4>
     <hr />
-    <dl class="dl-horizontal">
+    <dl>
         <dt>
-            @Html.DisplayNameFor(model => model.Listener.ScreenName)
+            @Html.DisplayNameFor(model => model.Playlist.Listener.ScreenName)
         </dt>
 
         <dd>
-            @Html.DisplayFor(model => model.Listener.ScreenName)
+            @Html.DisplayFor(model => model.Playlist.Listener.ScreenName)
         </dd>
 
         <dt>
-            @Html.DisplayNameFor(model => model.PlaylistName)
+            @Html.DisplayNameFor(model => model.Playlist.PlaylistName)
         </dt>
 
         <dd>
-            @Html.DisplayFor(model => model.PlaylistName)
+            @Html.DisplayFor(model => model.Playlist.PlaylistName)
         </dd>
 
+        <dt>
+            @Html.DisplayNameFor(model => model.Playlist.PlaylistMood)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Playlist.Mood.MoodName)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Playlist.PlaylistTracks)
+        </dt>
+
+        @foreach (var track in Model.Playlist.PlaylistTracks)
+        {
+
+            <dt>
+                @Html.DisplayFor(item => track.TrackName)<br /> By: 
+                @Html.DisplayFor(item => track.Artist.ArtistName)
+            </dt>
+        }
     </dl>
 </div>
 <p>
-    @Html.ActionLink("Edit", "Edit", new { id = Model.PlaylistId }) |
+    @Html.ActionLink("Edit", "Edit", new { id = Model.Playlist.PlaylistId }) |
     @Html.ActionLink("Back to List", "Index")
 </p>

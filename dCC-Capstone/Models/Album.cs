@@ -22,12 +22,12 @@ namespace Capstone.Models
         public string AlbumImageUrl { get; set; }
 
         [Display(Name = "Album Tracks")]
-        public IList<Track> AlbumTracks { get; set; }
+        public List<Track> AlbumTracks { get; set; }
 
         [Display(Name = "Album Genres")]
-        public IList<Genre> AlbumGenres { get; set; }
+        public List<Genre> AlbumGenres { get; set; }
 
         [Display(Name = "Album Artists")]
-        public IList<Artist> AlbumArtists { get; set; }
+        public List<Artist> AlbumArtists { get; set; }
     }
 }

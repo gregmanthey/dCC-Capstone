@@ -18,6 +18,9 @@ namespace Capstone.Models
         [Display(Name = "Playlist Name")]
         public string PlaylistName { get; set; }
 
+        [Display(Name = "Number of tracks")]
+        public int TrackCount { get => PlaylistTracks.Count; }
+
         [ForeignKey("Mood")]
         [Display(Name = "Playlist Mood")]
         public int? PlaylistMood { get; set; }
@@ -40,9 +43,9 @@ namespace Capstone.Models
         public Listener Listener { get; set; }
 
         [Display(Name = "Playlist Tracks")]
-        public IList<Track> PlaylistTracks { get; set; }
+        public List<Track> PlaylistTracks { get; set; }
 
         [Display(Name = "Playlist Genres")]
-        public IList<Genre> PlaylistGenres { get; set; }
+        public List<Genre> PlaylistGenres { get; set; }
     }
 }

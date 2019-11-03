@@ -9,6 +9,7 @@ using System.Web;
 using System.Web.Mvc;
 using Capstone.Models;
 using Microsoft.AspNet.Identity;
+using Capstone.Models.ViewModels;
 
 namespace Capstone.Controllers
 {
@@ -35,7 +36,12 @@ namespace Capstone.Controllers
             {
                 return HttpNotFound();
             }
-            return View(playlist);
+            var viewModel = new PlaylistArtistViewModel()
+            {
+                Playlist = playlist,
+                Artists = db.Artists.ToList()
+            };
+            return View(viewModel);
         }
 
         // GET: Playlists/Create
@@ -65,11 +71,20 @@ namespace Capstone.Controllers
                     playlist.Mood = await db.Moods.FindAsync(playlist.PlaylistMood);
                 }
                 var currentListener = GetCurrentListener();
-                //Spotify Recommendations API call, pass in mood, weighted randomized genres/artists/tracks seed (combined max total of 5), weighted popularity range
-                playlist = await SpotifyInteractionController.SpotifySearchForRecommendedTracks(currentListener, playlist);
+                var playlistTasks = new List<Task<Playlist>>();
+                for (int i = 0; i < 20; i++)
+                {
+                    playlistTasks.Add(SpotifyInteractionController.SpotifySearchForRecommendedTracks(currentListener, playlist));
+                }
+                foreach (var task in playlistTasks)
+                {
+                    var newPlaylist = await task;
+                    playlist.PlaylistTracks.AddRange(newPlaylist.PlaylistTracks);
+                }
+                playlist.PlaylistTracks = playlist.PlaylistTracks.Distinct().ToList();
                 playlist.CreatedBy = currentListener.ListenerId;
                 var playlistInDb = db.Playlists.Add(playlist);
-                await db.SaveChangesAsync();
+                db.SaveChanges();
                 return RedirectToAction("Details", new { id = playlistInDb.PlaylistId});
             }
             return RedirectToAction("Details", new { id = playlist.PlaylistId });

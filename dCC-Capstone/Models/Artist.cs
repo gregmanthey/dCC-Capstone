@@ -34,13 +34,13 @@ namespace Capstone.Models
         public string SearchedGenre { get; set; }
 
         [Display(Name = "Artist Sub-genres")]
-        public IList<Genre> ArtistGenres { get; set; }
+        public List<Genre> ArtistGenres { get; set; }
 
         [Display(Name = "Artist Listeners")]
-        public IList<Listener> ArtistListeners { get; set; }
+        public List<Listener> ArtistListeners { get; set; }
 
         [Display(Name = "Artist Albums")]
-        public IList<Album> ArtistAlbums { get; set; }
+        public List<Album> ArtistAlbums { get; set; }
 
     }
 }

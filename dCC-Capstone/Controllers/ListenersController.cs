@@ -73,6 +73,7 @@ namespace Capstone.Controllers
 
             return RedirectToAction("PickArtists");
         }
+
         public async Task<ActionResult> PickArtists()
         {
             var currentListener = GetCurrentListener();
@@ -82,13 +83,19 @@ namespace Capstone.Controllers
             {
                 await SpotifyInteractionController.SpotifyGenerateGenreSeeds(currentListener);
             }
-            genres.AddRange(db.Genres.ToList());
-            for(int i = 0; i < 15; i++)
+            genres.AddRange(db.Genres.AsNoTracking().ToList());
+            List<Task<Artist>> artistTask = new List<Task<Artist>>();
+            for(int i = 0; i < 25; i++)
             {
                 var genre = genres[Randomness.RandomInt(0, genres.Count)];
-                var artist = await SpotifyInteractionController.SpotifySearchForArtistInGenre(genre, currentListener);
-                if (artist != null && 
-                    artists.FirstOrDefault(a=>a.ArtistSpotifyId == artist.ArtistSpotifyId) is null)
+                artistTask.Add(SpotifyInteractionController.SpotifySearchForArtistInGenre(genre, currentListener));
+            }
+
+            foreach (var task in artistTask)
+            {
+                var artist = await task;
+                if (artist != null &&
+                    artists.FirstOrDefault(a => a.ArtistSpotifyId == artist.ArtistSpotifyId) is null)
                 {
                     artists.Add(artist);
                 }
@@ -99,13 +106,29 @@ namespace Capstone.Controllers
         [HttpPost]
         public ActionResult PickArtists(List<Artist> artists)
         {
-            
-            var listenerInDb = GetCurrentListener();
+            string userGuid = User.Identity.GetUserId();
+            var listenerInDb =  db.Listeners.Include("ListenerArtists").Include("ListenerGenres").FirstOrDefault(l => l.UserGuid == userGuid);
             foreach (var artist in artists)
             {
                 if (artist.ArtistChecked)
                 {
                     artist.ArtistChecked = false;
+                    for (int i = artist.ArtistGenres.Count - 1; i > 0; i--)
+                    {
+                        Genre genre = artist.ArtistGenres[i];
+                        var genreInDb = db.Genres.FirstOrDefault(g => g.GenreSpotifyName == genre.GenreSpotifyName);
+                        if (genreInDb is null)
+                        {
+                            genreInDb = db.Genres.Add(genre);
+                            db.SaveChanges();
+                            listenerInDb.ListenerGenres.Add(genreInDb);
+                        }
+                        else if (listenerInDb.ListenerGenres.FirstOrDefault(g => g.GenreId == genreInDb.GenreId) is null)
+                        {
+                            listenerInDb.ListenerGenres.Add(genreInDb);
+                        }
+                        genre = genreInDb;
+                    }
                     Artist artistInDb = db.Artists.FirstOrDefault(a => a.ArtistSpotifyId == artist.ArtistSpotifyId);
 
                     if (artistInDb is null)
@@ -171,7 +194,7 @@ namespace Capstone.Controllers
         private Listener GetCurrentListener()
         {
             string userGuid = User.Identity.GetUserId();
-            return db.Listeners.Include("ListenerArtists").Include("ListenerGenres").Include("ListenerTracks").FirstOrDefault(l => l.UserGuid == userGuid);
+            return db.Listeners.FirstOrDefault(l => l.UserGuid == userGuid);
         }
     }
 }

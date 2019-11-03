@@ -28,17 +28,24 @@
                 <p class="card-text">
                     <b>Popularity:</b> @Model[i].ArtistPopularity/100<br />
                     <b>Genres:</b><br />
-                    @for (int j = 0; j < 3 && j < Model[i].ArtistGenres.Count(); j++)
+                    @for (int j = 0; j < Model[i].ArtistGenres.Count(); j++)
                     {
-                        <a target="_blank" rel="noopener nofollow noreferrer" href="https://duckduckgo.com/?q=@Model[i].ArtistGenres[j].GenreSpotifyName">
+                        <a target="_blank" rel="noopener nofollow noreferrer" href="https://duckduckgo.com/?q=@Model[i].ArtistGenres[j].GenreSpotifyName music genre">
                             @Model[i].ArtistGenres[j].GenreSpotifyName
                         </a>
+                        @Html.HiddenFor(modelItem => Model[i].ArtistGenres[j].GenreId)
+                        @Html.HiddenFor(modelItem => Model[i].ArtistGenres[j].GenreSpotifyName)
+
                         <br />
                     }
                 </p>
             </div>
         </div>
-        @Html.HiddenFor(modelItem => Model[i].ArtistGenres)
+        @*@for (int j = 0; j < Model[i].ArtistGenres.Count; j++)
+        {
+            @Html.HiddenFor(modelItem => Model[i].ArtistGenres[j])
+        }*@
+
         @Html.HiddenFor(modelItem => Model[i].ArtistListeners)
         @Html.HiddenFor(modelItem => Model[i].ArtistName)
         @Html.HiddenFor(modelItem => Model[i].ArtistPopularity)

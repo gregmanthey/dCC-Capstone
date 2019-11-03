@@ -78,35 +78,47 @@ namespace Capstone.Controllers
             var response = await SendSpotifyHttpRequest(url, "GET", listener);
             var jsonResponse = await response.Content.ReadAsStringAsync();
             var artistsRootobject = JsonConvert.DeserializeObject<SpotifyArtistsSearchJsonResponse.Rootobject>(jsonResponse);
-            try
+            //try
+            //{
+            if (artistsRootobject.artists.items.Length > 0)
             {
                 var artistItem = artistsRootobject.artists.items[0];
                 string songPreviewUrl = await GetArtistTopTrackPreviewUrl(listener, artistItem.id);
                 List<Genre> artistGenres = new List<Genre>();
                 for (int i = 0; i < artistItem.genres.Length; i++)
                 {
-                    artistGenres.Add(new Genre() { GenreSpotifyName = artistItem.genres[i] });
+                    var artistGenre = new Genre() { GenreSpotifyName = artistItem.genres[i] };
+                    var artistGenreString = artistItem.genres[i];
+                    var genreInDb = db.Genres.FirstOrDefault(g => g.GenreSpotifyName == artistGenreString);
+                    if (genreInDb is null)
+                    {
+                        genreInDb = db.Genres.Add(artistGenre);
+                        db.SaveChanges();
+                    }
+                    artistGenres.Add(genreInDb);
                 }
 
-                Artist artist = new Artist()
+                if (artistItem.images.Length > 0)
                 {
-                    ArtistName = artistItem.name,
-                    ArtistSpotifyId = artistItem.id,
-                    ArtistPopularity = artistItem.popularity,
-                    ArtistGenres = artistGenres,
-                    ArtistImageUrl = artistItem.images[0].url,
-                    ArtistSpotifyUrl = artistItem.external_urls.spotify,
-                    ArtistTopTrackPreviewUrl = songPreviewUrl,
-                    SearchedGenre = genre.GenreSpotifyName
-                };
-
-
-                return artist;
+                    return new Artist()
+                    {
+                        ArtistName = artistItem.name,
+                        ArtistSpotifyId = artistItem.id,
+                        ArtistPopularity = artistItem.popularity,
+                        ArtistGenres = artistGenres,
+                        ArtistImageUrl = artistItem.images[0].url,
+                        ArtistSpotifyUrl = artistItem.external_urls.spotify,
+                        ArtistTopTrackPreviewUrl = songPreviewUrl,
+                        SearchedGenre = genre.GenreSpotifyName
+                    };
+                }
             }
-            catch (Exception)
-            {
-                return null;
-            }
+            return null;
+            //}
+            //catch (Exception)
+            //{
+            //    return null;
+            //}
         }
         public async static Task<string> GetArtistTopTrackPreviewUrl(Listener listener, string artistSpotifyId)
         {
@@ -119,7 +131,7 @@ namespace Capstone.Controllers
 
         public async static Task<Object> GetTrackDetailsFromSpotify(Listener listener, string trackSpotifyId)
         {
-            string url = "https://api.spotify.com/v1/recommendations/available-genre-seeds";
+            string url = "https://api.spotify.com/v1/";
             var content = await SendSpotifyHttpRequest(url, "GET", listener);
             var jsonResponse = await content.Content.ReadAsStringAsync();
             var genreStrings = JsonConvert.DeserializeObject<SpotifyGenresJsonResponse.Rootobject>(jsonResponse).genres.ToList();
@@ -142,65 +154,67 @@ namespace Capstone.Controllers
             {
                 throw new Exception("Error: Authenticated listener is required to make API call.");
             }
-            string trackLimitNumber = "82";
+            string trackLimitNumber = "5";
             StringBuilder urlBuilder = new StringBuilder($"https://api.spotify.com/v1/recommendations");
             urlBuilder.Append("?limit=" + trackLimitNumber);
             urlBuilder.Append("&target_popularity=" + playlist.PopularityTarget);
             urlBuilder.Append("&market=US");
 
-            if (listener.ListenerGenres.Count > 0)
-            {
+            //if (listener.ListenerGenres.Count > 0)
+            //{
                 urlBuilder.Append("&seed_genres=");
-                bool prependComma = false;
-                for(int i = 0; i < 5 && i < listener.ListenerGenres.Count; i++)
-                {
+            //    bool prependComma = false;
+            //    for (int i = 0; i < 5; i++)
+            //    {
                     int randomIndex = Randomness.RandomInt(0, listener.ListenerGenres.Count);
-                    if (prependComma)
-                    {
-                        urlBuilder.Append(",");
-                    }
+            //        if (prependComma)
+            //        {
+            //            urlBuilder.Append(",");
+            //        }
                     urlBuilder.Append(listener.ListenerGenres[randomIndex].GenreSpotifyName);
-                    prependComma = true;
-                }
-            }
+            //        prependComma = true;
+            //    }
+            //}
 
-            else if (listener.ListenerArtists.Count > 0)
-            {
-                urlBuilder.Append("&seed_artists=");
-                bool prependComma = false;
-                for (int i = 0; i < 5 && i < listener.ListenerArtists.Count; i++)
-                {
-                    if (prependComma)
-                    {
-                        urlBuilder.Append(",");
-                    }
-                    urlBuilder.Append(listener.ListenerArtists[i].ArtistSpotifyId);
-                    prependComma = true;
-                }
-            }
+            //else if (listener.ListenerArtists.Count > 0)
+            //{
+            //    urlBuilder.Append("&seed_artists=");
+            //    bool prependComma = false;
+            //    for (int i = 0; i < 5; i++)
+            //    {
+            //        int randomIndex = Randomness.RandomInt(0, listener.ListenerArtists.Count);
+            //        if (prependComma)
+            //        {
+            //            urlBuilder.Append(",");
+            //        }
+            //            urlBuilder.Append(listener.ListenerArtists[randomIndex].ArtistSpotifyId);
+            //        prependComma = true;
+            //    }
+            //}
 
-            else if (listener.ListenerTracks.Count > 0)
-            {
-                urlBuilder.Append("&seed_tracks=");
-                bool prependComma = false;
-                for (int i = 0; i < 5 && i < listener.ListenerTracks.Count; i++)
-                {
-                    if (prependComma)
-                    {
-                        urlBuilder.Append(",");
-                    }
-                    urlBuilder.Append(listener.ListenerTracks[i].TrackSpotifyId);
-                    prependComma = true;
-                }
-            }
+            //else if (listener.ListenerTracks.Count > 0)
+            //{
+            //    urlBuilder.Append("&seed_tracks=");
+            //    bool prependComma = false;
+            //    for (int i = 0; i < 5; i++)
+            //    {
+            //        int randomIndex = Randomness.RandomInt(0, listener.ListenerTracks.Count);
+            //        if (prependComma)
+            //        {
+            //            urlBuilder.Append(",");
+            //        }
+            //        urlBuilder.Append(listener.ListenerTracks[randomIndex].TrackSpotifyId);
+            //        prependComma = true;
+            //    }
+            //}
 
-            else
-            {
-                Console.WriteLine("Error, we need to have a liked Artist, Genre, or Track to generate a playlist");
-                return null;
-            }
+            //else
+            //{
+            //    Console.WriteLine("Error, we need to have a liked Artist, Genre, or Track to generate a playlist");
+            //    return null;
+            //}
 
-            
+
             if (playlist.Mood != null)
             {
                 //urlBuilder.Append("&min_valence=" + playlist.Mood.MoodValenceMinimum.ToString());
@@ -248,36 +262,40 @@ namespace Capstone.Controllers
                     TrackAlbumSpotifyId = track.album.id,
                     TrackSpotifyId = track.id,
                     TrackName = track.name,
-                    TrackPopularity = track.popularity
+                    TrackPopularity = track.popularity,
+                    TrackSpotifyUrl = track.external_urls.spotify
                 };
 
                 var trackArtist = track.artists[0];
-                    Artist artistInDb = db.Artists.FirstOrDefault(a => a.ArtistSpotifyId == trackArtist.id);
+                Artist artistInDb = db.Artists.FirstOrDefault(a => a.ArtistSpotifyId == trackArtist.id);
 
-                    if (artistInDb is null)
+                if (artistInDb is null)
+                {
+                    artistInDb = new Artist()
                     {
-                        artistInDb = new Artist()
-                        {
-                            ArtistName = trackArtist.name,
-                            ArtistSpotifyId = trackArtist.id,
-                            ArtistSpotifyUrl = trackArtist.external_urls.spotify
-                        };
-                        artistInDb = db.Artists.Add(artistInDb);
-                        db.SaveChanges();
-                    }
-                    
-                    newTrack.TrackArtistId = artistInDb.ArtistId;
-                    
-                    
-                
-                playlistTracks.Add(newTrack);
+                        ArtistName = trackArtist.name,
+                        ArtistSpotifyId = trackArtist.id,
+                        ArtistSpotifyUrl = trackArtist.external_urls.spotify
+                    };
+                    artistInDb = db.Artists.Add(artistInDb);
+                    db.SaveChanges();
+                }
+
+                newTrack.TrackArtistId = artistInDb.ArtistId;
+                Track newTrackInDb = db.Tracks.FirstOrDefault(t => t.TrackSpotifyId == track.id);
+                if (newTrackInDb is null)
+                {
+                    newTrackInDb = db.Tracks.Add(newTrack);
+                    db.SaveChanges();
+                }
+                playlistTracks.Add(newTrackInDb);
             }
             playlist.PlaylistTracks = playlistTracks;
-            
+
             return playlist;
         }
 
-        public async static Task<IList<Genre>> SpotifyGenerateGenreSeeds(Listener listener)
+        public async static Task<List<Genre>> SpotifyGenerateGenreSeeds(Listener listener)
         {
             //GET https://api.spotify.com/v1/search
             //Authorization: Bearer {access token}
@@ -286,7 +304,7 @@ namespace Capstone.Controllers
             var content = await SendSpotifyHttpRequest(url, "GET", listener);
             var jsonResponse = await content.Content.ReadAsStringAsync();
             var genreStrings = JsonConvert.DeserializeObject<SpotifyGenresJsonResponse.Rootobject>(jsonResponse).genres.ToList();
-            if (!db.Genres.Any())
+            if (!db.Genres.AsNoTracking().Any())
             {
                 foreach (var genre in genreStrings)
                 {
