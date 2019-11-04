@@ -153,44 +153,46 @@ namespace Capstone.Controllers
                 Console.WriteLine("Error: Authenticated listener is required to make API call.");
                 return null;
             }
-            string trackLimitNumber = "20";
+            string trackLimitNumber = "5";
             StringBuilder urlBuilder = new StringBuilder($"https://api.spotify.com/v1/recommendations");
             urlBuilder.Append("?limit=" + trackLimitNumber);
             urlBuilder.Append("&target_popularity=" + playlist.PopularityTarget);
             urlBuilder.Append("&market=US");
 
-            var genreSeeds = listener.ListenerGenres.Where(g => g.IsSpotifyGenreSeed == true).ToList();
+            var genreSeeds = listener.ListenerGenres.Where(g => g.IsSpotifyGenreSeed == true).Select(g => g.GenreSpotifyName).ToList();
+            genreSeeds.AddRange(listener.ListenerArtists.Where(a => !String.IsNullOrEmpty(a.SearchedGenre)).Select(a => a.SearchedGenre).ToList());
+
             if (genreSeeds.Count() > 0)
             {
                 urlBuilder.Append("&seed_genres=");
-                bool prependComma = false;
-                for (int i = 0; i < 5; i++)
-                {
+                //bool prependComma = false;
+                //for (int i = 0; i < 5; i++)
+                //{
 
                     int randomIndex = Randomness.RandomInt(0, genreSeeds.Count());
-                    if (prependComma)
-                    {
-                        urlBuilder.Append(",");
-                    }
-                    urlBuilder.Append(genreSeeds[randomIndex].GenreSpotifyName);
-                    prependComma = true;
-                }
+                    //if (prependComma)
+                    //{
+                    //    urlBuilder.Append(",");
+                    //}
+                    urlBuilder.Append(genreSeeds[randomIndex]);
+                    //prependComma = true;
+                //}
             }
 
             else if (listener.ListenerArtists.Count > 0)
             {
                 urlBuilder.Append("&seed_artists=");
-                //bool prependComma = false;
-                //for (int i = 0; i < 5; i++)
-                //{
-                int randomIndex = Randomness.RandomInt(0, listener.ListenerArtists.Count);
-                //if (prependComma)
-                //{
-                //    urlBuilder.Append(",");
-                //}
-                urlBuilder.Append(listener.ListenerArtists[randomIndex].ArtistSpotifyId);
-                //prependComma = true;
-                //}
+                bool prependComma = false;
+                for (int i = 0; i < 1; i++)
+                {
+                    int randomIndex = Randomness.RandomInt(0, listener.ListenerArtists.Count);
+                    if (prependComma)
+                    {
+                        urlBuilder.Append(",");
+                    }
+                    urlBuilder.Append(listener.ListenerArtists[randomIndex].ArtistSpotifyId);
+                    prependComma = true;
+                }
             }
 
             else if (listener.ListenerTracks.Count > 0)
@@ -218,33 +220,69 @@ namespace Capstone.Controllers
 
             if (playlist.Mood != null)
             {
-                //urlBuilder.Append("&min_valence=" + playlist.Mood.MoodValenceMinimum.ToString());
-                //urlBuilder.Append("&max_valence=" + playlist.Mood.MoodValenceMaximum.ToString());
-                urlBuilder.Append("&target_valence=" + playlist.Mood.MoodValenceTarget.ToString());
-                //urlBuilder.Append("&min_tempo=" + playlist.Mood.MoodTempoMinimum.ToString());
-                //urlBuilder.Append("&max_tempo=" + playlist.Mood.MoodTempoMaximum.ToString());
-                urlBuilder.Append("&target_tempo=" + playlist.Mood.MoodTempoTarget.ToString());
-                //urlBuilder.Append("&min_energy=" + playlist.Mood.MoodEnergyMinimum.ToString());
-                //urlBuilder.Append("&max_energy=" + playlist.Mood.MoodEnergyMaximum.ToString());
-                urlBuilder.Append("&target_energy=" + playlist.Mood.MoodEnergyTarget.ToString());
-                //urlBuilder.Append("&min_danceability=" + playlist.Mood.MoodDanceabilityMinimum.ToString());
-                //urlBuilder.Append("&max_danceability=" + playlist.Mood.MoodDanceabilityMaximum.ToString());
-                urlBuilder.Append("&target_danceability=" + playlist.Mood.MoodDanceabilityTarget.ToString());
-                //urlBuilder.Append("&min_acousticness=" + playlist.Mood.MoodAcousticnessMinimum.ToString());
-                //urlBuilder.Append("&max_acousticness=" + playlist.Mood.MoodAcousticnessMaximum.ToString());
-                urlBuilder.Append("&target_acousticness=" + playlist.Mood.MoodAcousticnessTarget.ToString());
-                //urlBuilder.Append("&min_speechiness=" + playlist.Mood.MoodSpeechinessMinimum.ToString());
-                //urlBuilder.Append("&max_speechiness=" + playlist.Mood.MoodSpeechinessMaximum.ToString());
-                urlBuilder.Append("&target_speechiness=" + playlist.Mood.MoodSpeechinessTarget.ToString());
-                //urlBuilder.Append("&min_instrumentalness=" + playlist.Mood.MoodInstrumentalnessMinimum.ToString());
-                //urlBuilder.Append("&max_instrumentalness=" + playlist.Mood.MoodInstrumentalnessMaximum.ToString());
-                urlBuilder.Append("&target_instrumentalness=" + playlist.Mood.MoodInstrumentalnessTarget.ToString());
-                //urlBuilder.Append("&min_liveness=" + playlist.Mood.MoodLivenessMinimum.ToString());
-                //urlBuilder.Append("&max_liveness=" + playlist.Mood.MoodLivenessMaximum.ToString());
-                urlBuilder.Append("&target_liveness=" + playlist.Mood.MoodLivenessTarget.ToString());
-                //urlBuilder.Append("&min_loudness=" + playlist.Mood.MoodLoudnessMinimum.ToString());
-                //urlBuilder.Append("&max_loudness=" + playlist.Mood.MoodLoudnessMaximum.ToString());
-                urlBuilder.Append("&target_mode=" + playlist.Mood.IsInMajorKeyMood.ToString());
+                if(playlist.Mood.MoodValenceMinimum != null)
+                    urlBuilder.Append("&min_valence=" + playlist.Mood.MoodValenceMinimum.ToString());
+                if (playlist.Mood.MoodValenceMaximum != null)
+                    urlBuilder.Append("&max_valence=" + playlist.Mood.MoodValenceMaximum.ToString());
+                if (playlist.Mood.MoodValenceTarget != null)
+                    urlBuilder.Append("&target_valence=" + playlist.Mood.MoodValenceTarget.ToString());
+
+                if (playlist.Mood.MoodTempoMinimum != null)
+                    urlBuilder.Append("&min_tempo=" + playlist.Mood.MoodTempoMinimum.ToString());
+                if (playlist.Mood.MoodTempoMaximum != null)
+                    urlBuilder.Append("&max_tempo=" + playlist.Mood.MoodTempoMaximum.ToString());
+                if (playlist.Mood.MoodTempoTarget != null)
+                    urlBuilder.Append("&target_tempo=" + playlist.Mood.MoodTempoTarget.ToString());
+
+                if (playlist.Mood.MoodEnergyMinimum != null)
+                    urlBuilder.Append("&min_energy=" + playlist.Mood.MoodEnergyMinimum.ToString());
+                if (playlist.Mood.MoodEnergyMaximum != null)
+                    urlBuilder.Append("&max_energy=" + playlist.Mood.MoodEnergyMaximum.ToString());
+                if (playlist.Mood.MoodEnergyTarget != null)
+                    urlBuilder.Append("&target_energy=" + playlist.Mood.MoodEnergyTarget.ToString());
+
+                if (playlist.Mood.MoodDanceabilityMinimum != null)
+                    urlBuilder.Append("&min_danceability=" + playlist.Mood.MoodDanceabilityMinimum.ToString());
+                if (playlist.Mood.MoodDanceabilityMinimum != null)
+                    urlBuilder.Append("&max_danceability=" + playlist.Mood.MoodDanceabilityMaximum.ToString());
+                if (playlist.Mood.MoodDanceabilityTarget != null)
+                    urlBuilder.Append("&target_danceability=" + playlist.Mood.MoodDanceabilityTarget.ToString());
+
+                if (playlist.Mood.MoodAcousticnessMinimum != null)
+                    urlBuilder.Append("&min_acousticness=" + playlist.Mood.MoodAcousticnessMinimum.ToString());
+                if (playlist.Mood.MoodAcousticnessMinimum != null)
+                    urlBuilder.Append("&max_acousticness=" + playlist.Mood.MoodAcousticnessMaximum.ToString());
+                if (playlist.Mood.MoodAcousticnessTarget != null)
+                    urlBuilder.Append("&target_acousticness=" + playlist.Mood.MoodAcousticnessTarget.ToString());
+
+                if (playlist.Mood.MoodSpeechinessMinimum != null)
+                    urlBuilder.Append("&min_speechiness=" + playlist.Mood.MoodSpeechinessMinimum.ToString());
+                if (playlist.Mood.MoodSpeechinessMinimum != null)
+                    urlBuilder.Append("&max_speechiness=" + playlist.Mood.MoodSpeechinessMaximum.ToString());
+                if (playlist.Mood.MoodSpeechinessTarget != null)
+                    urlBuilder.Append("&target_speechiness=" + playlist.Mood.MoodSpeechinessTarget.ToString());
+
+                if (playlist.Mood.MoodInstrumentalnessMinimum != null)
+                    urlBuilder.Append("&min_instrumentalness=" + playlist.Mood.MoodInstrumentalnessMinimum.ToString());
+                if (playlist.Mood.MoodInstrumentalnessMinimum != null)
+                    urlBuilder.Append("&max_instrumentalness=" + playlist.Mood.MoodInstrumentalnessMaximum.ToString());
+                if (playlist.Mood.MoodInstrumentalnessTarget != null)
+                    urlBuilder.Append("&target_instrumentalness=" + playlist.Mood.MoodInstrumentalnessTarget.ToString());
+
+                if (playlist.Mood.MoodLivenessMinimum != null)
+                    urlBuilder.Append("&min_liveness=" + playlist.Mood.MoodLivenessMinimum.ToString());
+                if (playlist.Mood.MoodLivenessMinimum != null)
+                    urlBuilder.Append("&max_liveness=" + playlist.Mood.MoodLivenessMaximum.ToString());
+                if (playlist.Mood.MoodLivenessTarget != null)
+                    urlBuilder.Append("&target_liveness=" + playlist.Mood.MoodLivenessTarget.ToString());
+
+                if (playlist.Mood.MoodLoudnessMinimum != null)
+                    urlBuilder.Append("&min_loudness=" + playlist.Mood.MoodLoudnessMinimum.ToString());
+                if (playlist.Mood.MoodLoudnessMinimum != null)
+                    urlBuilder.Append("&max_loudness=" + playlist.Mood.MoodLoudnessMaximum.ToString());
+
+                if (playlist.Mood.IsInMajorKeyMood != null)
+                    urlBuilder.Append("&target_mode=" + playlist.Mood.IsInMajorKeyMood.ToString());
             }
             if (playlist.DynamicTracksOnly)
             {

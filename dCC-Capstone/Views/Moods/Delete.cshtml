@@ -1,0 +1,256 @@
+﻿@model Capstone.Models.Mood
+
+@{
+    ViewBag.Title = "Delete";
+}
+
+<h2>Delete</h2>
+
+<h3>Are you sure you want to delete this?</h3>
+<div>
+    <h4>Mood</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.MoodName)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.MoodName)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.MoodEnergyMinimum)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.MoodEnergyMinimum)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.MoodEnergyMaximum)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.MoodEnergyMaximum)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.MoodEnergyTarget)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.MoodEnergyTarget)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.MoodAcousticnessMinimum)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.MoodAcousticnessMinimum)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.MoodAcousticnessMaximum)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.MoodAcousticnessMaximum)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.MoodAcousticnessTarget)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.MoodAcousticnessTarget)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.MoodSpeechinessMinimum)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.MoodSpeechinessMinimum)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.MoodSpeechinessMaximum)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.MoodSpeechinessMaximum)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.MoodSpeechinessTarget)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.MoodSpeechinessTarget)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.MoodInstrumentalnessMinimum)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.MoodInstrumentalnessMinimum)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.MoodInstrumentalnessMaximum)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.MoodInstrumentalnessMaximum)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.MoodInstrumentalnessTarget)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.MoodInstrumentalnessTarget)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.MoodLivenessMinimum)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.MoodLivenessMinimum)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.MoodLivenessMaximum)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.MoodLivenessMaximum)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.MoodLivenessTarget)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.MoodLivenessTarget)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.MoodDanceabilityMinimum)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.MoodDanceabilityMinimum)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.MoodDanceabilityMaximum)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.MoodDanceabilityMaximum)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.MoodDanceabilityTarget)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.MoodDanceabilityTarget)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.MoodLoudnessMinimum)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.MoodLoudnessMinimum)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.MoodLoudnessMaximum)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.MoodLoudnessMaximum)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.MoodLoudnessTarget)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.MoodLoudnessTarget)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.MoodTempoMinimum)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.MoodTempoMinimum)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.MoodTempoMaximum)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.MoodTempoMaximum)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.MoodTempoTarget)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.MoodTempoTarget)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.MoodValenceMinimum)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.MoodValenceMinimum)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.MoodValenceMaximum)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.MoodValenceMaximum)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.MoodValenceTarget)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.MoodValenceTarget)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.IsInMajorKeyMood)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.IsInMajorKeyMood)
+        </dd>
+
+    </dl>
+
+    @using (Html.BeginForm()) {
+        @Html.AntiForgeryToken()
+
+        <div class="form-actions no-color">
+            <input type="submit" value="Delete" class="btn btn-default" /> |
+            @Html.ActionLink("Back to List", "Index")
+        </div>
+    }
+</div>

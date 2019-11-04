@@ -1,0 +1,201 @@
+﻿@model IEnumerable<Capstone.Models.Mood>
+
+@{
+    ViewBag.Title = "Index";
+}
+
+<h2>Index</h2>
+
+<p>
+    @Html.ActionLink("Create New", "Create")
+</p>
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.MoodName)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.MoodEnergyMinimum)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.MoodEnergyMaximum)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.MoodEnergyTarget)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.MoodAcousticnessMinimum)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.MoodAcousticnessMaximum)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.MoodAcousticnessTarget)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.MoodSpeechinessMinimum)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.MoodSpeechinessMaximum)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.MoodSpeechinessTarget)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.MoodInstrumentalnessMinimum)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.MoodInstrumentalnessMaximum)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.MoodInstrumentalnessTarget)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.MoodLivenessMinimum)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.MoodLivenessMaximum)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.MoodLivenessTarget)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.MoodDanceabilityMinimum)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.MoodDanceabilityMaximum)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.MoodDanceabilityTarget)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.MoodLoudnessMinimum)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.MoodLoudnessMaximum)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.MoodLoudnessTarget)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.MoodTempoMinimum)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.MoodTempoMaximum)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.MoodTempoTarget)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.MoodValenceMinimum)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.MoodValenceMaximum)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.MoodValenceTarget)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.IsInMajorKeyMood)
+        </th>
+        <th></th>
+    </tr>
+
+@foreach (var item in Model) {
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.MoodName)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.MoodEnergyMinimum)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.MoodEnergyMaximum)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.MoodEnergyTarget)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.MoodAcousticnessMinimum)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.MoodAcousticnessMaximum)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.MoodAcousticnessTarget)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.MoodSpeechinessMinimum)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.MoodSpeechinessMaximum)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.MoodSpeechinessTarget)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.MoodInstrumentalnessMinimum)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.MoodInstrumentalnessMaximum)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.MoodInstrumentalnessTarget)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.MoodLivenessMinimum)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.MoodLivenessMaximum)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.MoodLivenessTarget)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.MoodDanceabilityMinimum)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.MoodDanceabilityMaximum)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.MoodDanceabilityTarget)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.MoodLoudnessMinimum)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.MoodLoudnessMaximum)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.MoodLoudnessTarget)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.MoodTempoMinimum)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.MoodTempoMaximum)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.MoodTempoTarget)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.MoodValenceMinimum)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.MoodValenceMaximum)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.MoodValenceTarget)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.IsInMajorKeyMood)
+        </td>
+        <td>
+            @Html.ActionLink("Edit", "Edit", new { id=item.MoodId }) |
+            @Html.ActionLink("Details", "Details", new { id=item.MoodId }) |
+            @Html.ActionLink("Delete", "Delete", new { id=item.MoodId })
+        </td>
+    </tr>
+}
+
+</table>

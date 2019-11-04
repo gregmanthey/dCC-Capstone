@@ -20,7 +20,8 @@ namespace Capstone.Controllers
         // GET: Playlists
         public async Task<ActionResult> Index()
         {
-            var playlists = db.Playlists.Include(p => p.Listener);
+            var currentListener = GetCurrentListener();
+            var playlists = db.Playlists.Include(p => p.Listener).Where(p => p.CreatedBy == currentListener.ListenerId);
             return View(await playlists.ToListAsync());
         }
 
@@ -76,11 +77,18 @@ namespace Capstone.Controllers
                     playlist.Mood = await db.Moods.FindAsync(playlist.PlaylistMood);
                 }
                 var currentListener = GetCurrentListener();
+                playlist.CreatedBy = db.Listeners.Find(currentListener.ListenerId).ListenerId;
                 var playlistTrackTasks = new List<Task<List<Track>>>();
                 var playlistTracks = new List<Track>();
                 for (int i = 0; i < 30; i++)
                 {
                     playlistTrackTasks.Add(SpotifyInteractionController.SpotifySearchForRecommendedTracks(currentListener, playlist));
+                    //var tracks = await SpotifyInteractionController.SpotifySearchForRecommendedTracks(currentListener, playlist);
+                    //if (tracks is null)
+                    //{
+                    //    continue;
+                    //}
+                    //playlistTracks.AddRange(tracks);
                 }
                 foreach (var task in playlistTrackTasks)
                 {
@@ -90,9 +98,9 @@ namespace Capstone.Controllers
                         playlistTracks.AddRange(tracks);
                     }
                 }
-                
+
                 playlist.PlaylistTracks = playlistTracks.Distinct().ToList();
-                playlist.CreatedBy = currentListener.ListenerId;
+                //playlist.Listener = currentListener;
                 var playlistInDb = db.Playlists.Add(playlist);
                 db.SaveChanges();
                 return RedirectToAction("Details", new { id = playlistInDb.PlaylistId});

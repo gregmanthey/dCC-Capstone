@@ -5,9 +5,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>@ViewBag.Title - Random Playlist Generator - Powered by Spotify</title>
     @Styles.Render("~/Content/css")
+    @*@Scripts.Render("~/bundles/bootstrap")
     @Scripts.Render("~/bundles/jquery")
-    @Scripts.Render("~/bundles/jqueryui")
-    @Scripts.Render("~/bundles/modernizr")
+    @Scripts.Render("~/bundles/modernizr")*@
 
 </head>
 <body>
@@ -22,8 +22,9 @@
             @Html.ActionLink("Random Playlist Generator", "Index", "Home", new { area = "" }, new { @class = "navbar-brand" })
             <div class="collapse navbar-collapse" id="navbar-collapse-main">
                 <ul class="nav navbar-nav mr-auto">
-                    <li>@Html.ActionLink("Choose More Artists", "PickArtists", "Listeners", new { @class = "nav-link" })</li>
-                    <li>@Html.ActionLink("Create Playlist", "Create", "Playlists", new { @class = "nav-link" })</li>
+                    <li>@Html.ActionLink("Choose More Artists", "PickArtists", "Listeners", null, new { @class = "nav-link" })</li>
+                    <li>@Html.ActionLink("Create Playlist", "Create", "Playlists", null, new { @class = "nav-link" })</li>
+                    <li>@Html.ActionLink("My Playlists", "Index", "Playlists", null, new { @class = "nav-link" })</li>
                 </ul>
                 @Html.Partial("_LoginPartial")
             </div>
