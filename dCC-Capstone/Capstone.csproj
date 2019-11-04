@@ -385,6 +385,14 @@
     <Compile Include="Migrations\201911040033591_TrackAudioFeatures.Designer.cs">
       <DependentUpon>201911040033591_TrackAudioFeatures.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201911040151525_TrackNumber.cs" />
+    <Compile Include="Migrations\201911040151525_TrackNumber.Designer.cs">
+      <DependentUpon>201911040151525_TrackNumber.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201911040215054_AlbumTotalTracks.cs" />
+    <Compile Include="Migrations\201911040215054_AlbumTotalTracks.Designer.cs">
+      <DependentUpon>201911040215054_AlbumTotalTracks.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\Album.cs" />
@@ -626,6 +634,12 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201911040033591_TrackAudioFeatures.resx">
       <DependentUpon>201911040033591_TrackAudioFeatures.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201911040151525_TrackNumber.resx">
+      <DependentUpon>201911040151525_TrackNumber.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201911040215054_AlbumTotalTracks.resx">
+      <DependentUpon>201911040215054_AlbumTotalTracks.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

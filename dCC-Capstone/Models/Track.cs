@@ -14,6 +14,12 @@ namespace Capstone.Models
         public string TrackSpotifyId { get; set; }
         public string TrackSpotifyUrl { get; set; }
         public string TrackName { get; set; }
+
+        [Display(Name ="Track Number")]
+        public int? TrackNumber { get; set; }
+
+        [Display(Name = "Disc Number")]
+        public int? TrackDiscNumber { get; set; }
         public string TrackPreviewUrl { get; set; }
 
         [ForeignKey("Artist")]

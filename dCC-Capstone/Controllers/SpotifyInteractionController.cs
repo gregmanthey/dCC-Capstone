@@ -78,8 +78,8 @@ namespace Capstone.Controllers
             var response = await SendSpotifyHttpRequest(url, "GET", listener);
             var jsonResponse = await response.Content.ReadAsStringAsync();
             var artistsRootobject = JsonConvert.DeserializeObject<SpotifyArtistsSearchJsonResponse.Rootobject>(jsonResponse);
-            try
-            {
+            //try
+            //{
                 if (artistsRootobject.artists.items.Length > 0)
                 {
                     var artistItem = artistsRootobject.artists.items[0];
@@ -87,12 +87,13 @@ namespace Capstone.Controllers
                     List<Genre> artistGenres = new List<Genre>();
                     for (int i = 0; i < artistItem.genres.Length; i++)
                     {
-                        var artistGenre = new Genre() { GenreSpotifyName = artistItem.genres[i] };
+                        
                         var artistGenreString = artistItem.genres[i];
                         var genreInDb = db.Genres.FirstOrDefault(g => g.GenreSpotifyName == artistGenreString);
                         if (genreInDb is null)
                         {
-                            genreInDb = db.Genres.Add(artistGenre);
+                        var artistGenre = new Genre() { GenreSpotifyName = artistGenreString };
+                        genreInDb = db.Genres.Add(artistGenre);
                             db.SaveChanges();
                         }
                         artistGenres.Add(genreInDb);
@@ -100,8 +101,9 @@ namespace Capstone.Controllers
 
                     if (artistItem.images.Length > 0)
                     {
-                        return new Artist()
+                        var newArtist = new Artist()
                         {
+                            ArtistId = 0,
                             ArtistName = artistItem.name,
                             ArtistSpotifyId = artistItem.id,
                             ArtistPopularity = artistItem.popularity,
@@ -111,14 +113,15 @@ namespace Capstone.Controllers
                             ArtistTopTrackPreviewUrl = songPreviewUrl,
                             SearchedGenre = genre.GenreSpotifyName
                         };
+                        return newArtist;
                     }
                 }
                 return null;
-            }
-            catch (Exception)
-            {
-                return null;
-            }
+            //}
+            //catch (Exception)
+            //{
+            //    return null;
+            //}
         }
         public async static Task<string> GetArtistTopTrackPreviewUrl(Listener listener, string artistSpotifyId)
         {
@@ -266,12 +269,16 @@ namespace Capstone.Controllers
 
                     Track newTrack = new Track()
                     {
+                        TrackId = 0,
                         TrackAlbumSpotifyId = track.album.id,
                         TrackSpotifyId = track.id,
                         TrackName = track.name,
                         TrackPopularity = track.popularity,
                         TrackSpotifyUrl = track.external_urls.spotify,
-                        TrackPreviewUrl = track.preview_url
+                        TrackPreviewUrl = track.preview_url,
+                        TrackDurationInMs = track.duration_ms,
+                        TrackNumber = track.track_number,
+                        TrackDiscNumber = track.disc_number
                     };
 
                     var trackArtist = track.artists[0];
@@ -281,6 +288,7 @@ namespace Capstone.Controllers
                     {
                         artistInDb = new Artist()
                         {
+                            ArtistId = 0,
                             ArtistName = trackArtist.name,
                             ArtistSpotifyId = trackArtist.id,
                             ArtistSpotifyUrl = trackArtist.external_urls.spotify
@@ -297,6 +305,7 @@ namespace Capstone.Controllers
                     {
                         albumArtistInDb = new Artist()
                         {
+                            ArtistId = 0,
                             ArtistName = albumArtist.name,
                             ArtistSpotifyId = albumArtist.id,
                             ArtistSpotifyUrl = albumArtist.external_urls.spotify
@@ -312,11 +321,13 @@ namespace Capstone.Controllers
                     {
                         albumInDb = new Album()
                         {
+                            AlbumId = 0,
                             AlbumArtistId = albumArtistInDb.ArtistId,
                             AlbumSpotifyId = album.id,
                             AlbumImageUrl = album.images[0].url,
                             AlbumName = album.name,
-                            AlbumSpotifyUrl = album.external_urls.spotify
+                            AlbumSpotifyUrl = album.external_urls.spotify,
+                            AlbumTotalTracks = album.total_tracks
                         };
                         albumInDb = db.Albums.Add(albumInDb);
                         db.SaveChanges();
@@ -363,7 +374,7 @@ namespace Capstone.Controllers
             {
                 foreach (var genre in genreStrings)
                 {
-                    Genre newGenre = new Genre { GenreSpotifyName = genre, IsSpotifyGenreSeed = true };
+                    Genre newGenre = new Genre { GenreId = 0, GenreSpotifyName = genre, IsSpotifyGenreSeed = true };
                     db.Genres.Add(newGenre);
                 }
                 db.SaveChanges();
@@ -384,12 +395,81 @@ namespace Capstone.Controllers
             track.TrackIsInMajorKey = audioFeatures.mode;
             track.TrackValence = audioFeatures.valence;
             track.TrackTempo = audioFeatures.tempo;
-            track.TrackDurationInMs = audioFeatures.duration_ms;
             track.TrackAcousticness = audioFeatures.acousticness;
             track.TrackInstrumentalness = audioFeatures.instrumentalness;
             return track;
-            
         }
+
+        public async static Task<Album> GetSpotifyAlbumDetails(Listener listener, Album album)
+        {
+            string url = $"https://api.spotify.com/v1/albums/{album.AlbumSpotifyId}";
+            var content = await SendSpotifyHttpRequest(url, "GET", listener);
+            var jsonResponse = await content.Content.ReadAsStringAsync();
+            var spotifyAlbum = JsonConvert.DeserializeObject<SpotifyAlbumDetailsJsonResponse.Rootobject>(jsonResponse);
+            album.AlbumTotalTracks = spotifyAlbum.total_tracks;
+            if (spotifyAlbum.images.Length > 0)
+            {
+                album.AlbumImageUrl = spotifyAlbum.images[0].url;
+            }
+
+            if (album.AlbumTracks.Count != album.AlbumTotalTracks)
+            {
+                for (int i = 0; i < spotifyAlbum.tracks.items.Length; i++)
+                {
+                    var track = spotifyAlbum.tracks.items[i];
+                        Track newTrack = new Track()
+                        {
+                            TrackId = 0,
+                            TrackAlbumSpotifyId = spotifyAlbum.id,
+                            TrackSpotifyId = track.id,
+                            TrackName = track.name,
+                            TrackSpotifyUrl = track.external_urls.spotify,
+                            TrackPreviewUrl = track.preview_url,
+                            TrackDurationInMs = track.duration_ms,
+                            TrackNumber = track.track_number,
+                            TrackDiscNumber = track.disc_number
+                        };
+                    var trackInDb = db.Tracks.Include("Album").Include("Artist").FirstOrDefault(t => t.TrackSpotifyId == track.id);
+                    if (trackInDb != null)
+                    {
+                        newTrack = trackInDb;
+                    }
+                    Artist newArtist = new Artist();
+                    if (track.artists != null)
+                    {
+                        var trackArtist = track.artists[0];
+                        newArtist = new Artist()
+                    {
+                        ArtistId = 0,
+                        ArtistName = trackArtist.name,
+                        ArtistSpotifyId = trackArtist.id,
+                        ArtistSpotifyUrl = trackArtist.external_urls.spotify
+                    };
+                        var trackArtistInDb = db.Artists.FirstOrDefault(a => a.ArtistSpotifyId == trackArtist.id);
+                        if (trackArtistInDb != null)
+                        {
+                            newArtist = trackArtistInDb;
+                        }
+                        else
+                        {
+                            newArtist = db.Artists.Add(newArtist);
+                        }
+                    }
+
+                    if (album.AlbumTracks.FirstOrDefault(t => t.TrackSpotifyId == newTrack.TrackSpotifyId) is null)
+                    {
+                        newTrack.Album = album;
+                        newTrack.Artist = newArtist;
+                        album.AlbumTracks.Add(newTrack);
+                    }
+
+                }
+            }
+
+            db.SaveChanges();
+            return album;
+        }
+
         public async static Task<HttpResponseMessage> SendSpotifyHttpRequest(string url, string type, Listener listener, Dictionary<string, string> postParameters = null)
         {
             Uri uri = new Uri(url);

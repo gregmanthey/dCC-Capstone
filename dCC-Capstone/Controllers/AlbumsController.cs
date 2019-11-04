@@ -8,6 +8,7 @@ using System.Net;
 using System.Web;
 using System.Web.Mvc;
 using Capstone.Models;
+using Microsoft.AspNet.Identity;
 
 namespace Capstone.Controllers
 {
@@ -29,12 +30,26 @@ namespace Capstone.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Album album = await db.Albums.FindAsync(id);
-            if (album == null)
+            Album albumInDb = await db.Albums.Include(a=>a.AlbumTracks).Include(a=>a.Artist).FirstOrDefaultAsync(a=>a.AlbumId == id);
+            if (albumInDb == null)
             {
                 return HttpNotFound();
             }
-            return View(album);
+
+            if (albumInDb.AlbumTracks.Count != albumInDb.AlbumTotalTracks)
+            {
+                string userGuid = User.Identity.GetUserId();
+                var currentListener = db.Listeners.FirstOrDefault(l => l.UserGuid == userGuid);
+                if (currentListener is null)
+                {
+                    Console.WriteLine("User is not logged in");
+                    return RedirectToAction("Index", "Home");
+                }
+                albumInDb = await SpotifyInteractionController.GetSpotifyAlbumDetails(currentListener, albumInDb);
+                
+            }
+
+            return View(albumInDb);
         }
 
         // GET: Albums/Create

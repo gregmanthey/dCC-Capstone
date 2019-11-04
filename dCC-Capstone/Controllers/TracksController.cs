@@ -36,20 +36,20 @@ namespace Capstone.Controllers
 
             var userGuid = User.Identity.GetUserId();
             var currentListener = db.Listeners.FirstOrDefault(l => l.UserGuid == userGuid);
-            Track track = await db.Tracks.Include(t => t.Album).Include(t => t.Artist).FirstOrDefaultAsync(t => t.TrackId == id);
+            Track trackInDb = await db.Tracks.Include(t => t.Album).Include(t => t.Artist).FirstOrDefaultAsync(t => t.TrackId == id);
             
-            if (track == null)
+            if (trackInDb == null)
             {
                 return HttpNotFound();
             }
 
-            if (track.TrackDurationInMs is null)
+            if (trackInDb.TrackAcousticness is null)
             {
-                track = await SpotifyInteractionController.GetSpotifyTrackDetails(currentListener, track);
+                trackInDb = await SpotifyInteractionController.GetSpotifyTrackDetails(currentListener, trackInDb);
                 db.SaveChanges();
             }
 
-            return View(track);
+            return View(trackInDb);
         }
 
         // GET: Tracks/Create

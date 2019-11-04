@@ -33,7 +33,7 @@ namespace Capstone.Controllers
             }
             Playlist playlist = await db.Playlists.
                 Include(p => p.PlaylistTracks).
-                Include(p => p.PlaylistMood).
+                Include(p => p.Mood).
                 FirstOrDefaultAsync(p => p.PlaylistId == id);
 
             if (playlist == null)

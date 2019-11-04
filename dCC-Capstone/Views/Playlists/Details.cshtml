@@ -56,12 +56,15 @@
                     <tr>
                         <td><a target="_blank" rel="noopener nofollow noreferrer" href="@Html.DisplayFor(item => track.TrackSpotifyUrl)">@Html.DisplayFor(item => track.TrackName)</a></td>
                         <td>@Html.DisplayFor(item => track.Artist.ArtistName)</td>
-                        <td>@Html.DisplayFor(item => track.Album.AlbumName)</td>
+                        <td><a href="@Url.Action("Details","Albums", new { id = track.Album.AlbumId})">@Html.DisplayFor(item => track.Album.AlbumName)</a></td>
                         <td>@Html.ActionLink("Details", "Details", "Tracks", new { id = track.TrackId }, null)</td>
                         <td>
-                            <audio controls>
-                                <source src="@track.TrackPreviewUrl" type="audio/ogg">
-                            </audio>
+                            @if (track.TrackPreviewUrl != null)
+                            {
+                                <audio controls>
+                                    <source src="@track.TrackPreviewUrl" type="audio/ogg">
+                                </audio>
+                            }
                         </td>
                     </tr>
                 }

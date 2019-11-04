@@ -5,6 +5,48 @@
 }
 
 <h2>Details</h2>
+<img src="@Model.AlbumImageUrl" alt="@Model.AlbumName" />
+<div>
+    <h3>Album Tracks</h3>
+    <table class="table table-hover table-dark">
+        <thead>
+            <tr>
+                <th scope="col">Disc Number</th>
+                <th scope="col">Track Number</th>
+                <th scope="col">Track Title</th>
+                <th scope="col">Artist</th>
+                <th scope="col">Album</th>
+                <th scope="col">Track Details</th>
+                <th scope="col">Track Preview</th>
+            </tr>
+        </thead>
+        <tbody>
+            @{
+                var tracks = Model.AlbumTracks.OrderBy(t => t.TrackNumber).ToList();
+                for (int i = 0; i < tracks.Count; i++)
+                {
+                    var track = tracks[i];
+                    <tr>
+                        <td>@Html.DisplayFor(item => track.TrackDiscNumber)</td>
+                        <td>@Html.DisplayFor(item => track.TrackNumber)</td>
+                        <td><a target="_blank" rel="noopener nofollow noreferrer" href="@Html.DisplayFor(item => track.TrackSpotifyUrl)">@Html.DisplayFor(item => track.TrackName)</a></td>
+                        <td>@Html.DisplayFor(item => track.Artist.ArtistName)</td>
+                        <td><a target="_blank" rel="noopener nofollow noreferrer" href="@Html.DisplayFor(item => track.TrackAlbumId)">@Html.DisplayFor(item => track.Album.AlbumName)</a></td>
+                        <td>@Html.ActionLink("Details", "Details", "Tracks", new { id = track.TrackId }, null)</td>
+                        <td>
+                            @if (track.TrackPreviewUrl != null)
+                            {
+                                <audio controls>
+                                    <source src="@track.TrackPreviewUrl" type="audio/ogg">
+                                </audio>
+                            }
+                        </td>
+                    </tr>
+                }
+            }
+        </tbody>
+    </table>
+</div>
 
 <div>
     <h4>Album</h4>

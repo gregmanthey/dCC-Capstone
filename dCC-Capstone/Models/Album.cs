@@ -22,6 +22,9 @@ namespace Capstone.Models
         [Display(Name = "Album Image URL")]
         public string AlbumImageUrl { get; set; }
 
+        [Display(Name ="Total Tracks")]
+        public int AlbumTotalTracks { get; set; }
+
         [Display(Name = "Album Tracks")]
         public List<Track> AlbumTracks { get; set; }
 
