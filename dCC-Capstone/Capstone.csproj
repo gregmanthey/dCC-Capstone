@@ -329,6 +329,7 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="JsonTemplateClasses\SpotifyAlbumDetailsJsonResponse.cs" />
     <Compile Include="JsonTemplateClasses\SpotifyArtistTopTracksJsonResponse.cs" />
     <Compile Include="JsonTemplateClasses\SpotifyRecommendedTracksJsonResponse.cs" />
     <Compile Include="Keys.cs" />
