@@ -1,0 +1,58 @@
+﻿@model Capstone.Models.Album
+
+@{
+    ViewBag.Title = "Details";
+}
+
+<h2>Details</h2>
+
+<div>
+    <h4>Album</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.Artist.ArtistSpotifyId)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Artist.ArtistSpotifyId)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.AlbumName)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.AlbumName)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.AlbumSpotifyId)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.AlbumSpotifyId)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.AlbumSpotifyUrl)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.AlbumSpotifyUrl)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.AlbumImageUrl)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.AlbumImageUrl)
+        </dd>
+
+    </dl>
+</div>
+<p>
+    @Html.ActionLink("Edit", "Edit", new { id = Model.AlbumId }) |
+    @Html.ActionLink("Back to List", "Index")
+</p>

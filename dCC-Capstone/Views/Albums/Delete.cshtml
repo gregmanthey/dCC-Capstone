@@ -1,0 +1,64 @@
+﻿@model Capstone.Models.Album
+
+@{
+    ViewBag.Title = "Delete";
+}
+
+<h2>Delete</h2>
+
+<h3>Are you sure you want to delete this?</h3>
+<div>
+    <h4>Album</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.Artist.ArtistSpotifyId)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Artist.ArtistSpotifyId)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.AlbumName)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.AlbumName)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.AlbumSpotifyId)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.AlbumSpotifyId)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.AlbumSpotifyUrl)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.AlbumSpotifyUrl)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.AlbumImageUrl)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.AlbumImageUrl)
+        </dd>
+
+    </dl>
+
+    @using (Html.BeginForm()) {
+        @Html.AntiForgeryToken()
+
+        <div class="form-actions no-color">
+            <input type="submit" value="Delete" class="btn btn-default" /> |
+            @Html.ActionLink("Back to List", "Index")
+        </div>
+    }
+</div>
