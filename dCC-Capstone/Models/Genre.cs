@@ -17,6 +17,7 @@ namespace Capstone.Models
 
         [Display(Name = "Genre Spotify Name")]
         public string GenreSpotifyName { get; set; }
+        public bool IsSpotifyGenreSeed { get; set; }
 
         [Display(Name = "Genre Listeners")]
         public List<Listener> GenreListeners { get; set; }

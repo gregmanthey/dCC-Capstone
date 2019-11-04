@@ -31,7 +31,11 @@ namespace Capstone.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Playlist playlist = await db.Playlists.Include("PlaylistTracks").Include("PlaylistGenres").Include("Mood").FirstOrDefaultAsync(p => p.PlaylistId == id);
+            Playlist playlist = await db.Playlists.
+                Include(p => p.PlaylistTracks).
+                Include(p => p.PlaylistMood).
+                FirstOrDefaultAsync(p => p.PlaylistId == id);
+
             if (playlist == null)
             {
                 return HttpNotFound();
@@ -39,7 +43,8 @@ namespace Capstone.Controllers
             var viewModel = new PlaylistArtistViewModel()
             {
                 Playlist = playlist,
-                Artists = db.Artists.ToList()
+                Artists = db.Artists.ToList(),
+                Albums = db.Albums.ToList()
             };
             return View(viewModel);
         }
@@ -71,23 +76,28 @@ namespace Capstone.Controllers
                     playlist.Mood = await db.Moods.FindAsync(playlist.PlaylistMood);
                 }
                 var currentListener = GetCurrentListener();
-                var playlistTasks = new List<Task<Playlist>>();
-                for (int i = 0; i < 20; i++)
+                var playlistTrackTasks = new List<Task<List<Track>>>();
+                var playlistTracks = new List<Track>();
+                for (int i = 0; i < 30; i++)
                 {
-                    playlistTasks.Add(SpotifyInteractionController.SpotifySearchForRecommendedTracks(currentListener, playlist));
+                    playlistTrackTasks.Add(SpotifyInteractionController.SpotifySearchForRecommendedTracks(currentListener, playlist));
                 }
-                foreach (var task in playlistTasks)
+                foreach (var task in playlistTrackTasks)
                 {
-                    var newPlaylist = await task;
-                    playlist.PlaylistTracks.AddRange(newPlaylist.PlaylistTracks);
+                    var tracks = await task;
+                    if (tracks != null)
+                    {
+                        playlistTracks.AddRange(tracks);
+                    }
                 }
-                playlist.PlaylistTracks = playlist.PlaylistTracks.Distinct().ToList();
+                
+                playlist.PlaylistTracks = playlistTracks.Distinct().ToList();
                 playlist.CreatedBy = currentListener.ListenerId;
                 var playlistInDb = db.Playlists.Add(playlist);
                 db.SaveChanges();
                 return RedirectToAction("Details", new { id = playlistInDb.PlaylistId});
             }
-            return RedirectToAction("Details", new { id = playlist.PlaylistId });
+            return RedirectToAction("Index");
         }
 
         // GET: Playlists/Edit/5

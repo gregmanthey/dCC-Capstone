@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Web;
 
@@ -27,7 +28,9 @@ namespace Capstone.Models
         [Display(Name = "Album Genres")]
         public List<Genre> AlbumGenres { get; set; }
 
-        [Display(Name = "Album Artists")]
-        public List<Artist> AlbumArtists { get; set; }
+        [ForeignKey("Artist")]
+        [Display(Name = "Album Artist")]
+        public int AlbumArtistId { get; set; }
+        public Artist Artist { get; set; }
     }
 }

@@ -14,6 +14,7 @@ namespace Capstone.Models
         public string TrackSpotifyId { get; set; }
         public string TrackSpotifyUrl { get; set; }
         public string TrackName { get; set; }
+        public string TrackPreviewUrl { get; set; }
 
         [ForeignKey("Artist")]
         [Display(Name = "Track Artist(s)")]
@@ -42,6 +43,12 @@ namespace Capstone.Models
 
         [Display(Name = "Loudness")]
         public double? TrackLoudness { get; set; }
+
+        [Display(Name ="Acousticness")]
+        public double? TrackAcousticness { get; set; }
+
+        [Display(Name ="Instrumentalness")]
+        public double? TrackInstrumentalness { get; set; }
 
         [Display(Name = "Popularity")]
         public int? TrackPopularity { get; set; }

@@ -12,6 +12,7 @@ namespace Capstone.Controllers
     public class ListenersController : Controller
     {
         ApplicationDbContext db;
+        private int genreSeedCount = 126;
         public ListenersController()
         {
             db = new ApplicationDbContext();
@@ -87,7 +88,7 @@ namespace Capstone.Controllers
             List<Task<Artist>> artistTask = new List<Task<Artist>>();
             for(int i = 0; i < 25; i++)
             {
-                var genre = genres[Randomness.RandomInt(0, genres.Count)];
+                var genre = genres[Randomness.RandomInt(0, genreSeedCount)];
                 artistTask.Add(SpotifyInteractionController.SpotifySearchForArtistInGenre(genre, currentListener));
             }
 

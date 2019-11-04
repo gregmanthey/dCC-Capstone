@@ -8,6 +8,7 @@ using System.Net;
 using System.Web;
 using System.Web.Mvc;
 using Capstone.Models;
+using Microsoft.AspNet.Identity;
 
 namespace Capstone.Controllers
 {
@@ -18,6 +19,10 @@ namespace Capstone.Controllers
         // GET: Tracks
         public async Task<ActionResult> Index()
         {
+            //var userGuid = User.Identity.GetUserId();
+            //var currentUser = db.Listeners.FirstOrDefault(l => l.UserGuid == userGuid);
+            //var userTracks = db.Playlists.Include(p => p.PlaylistTracks).Where(p => p.CreatedBy == currentUser.ListenerId).SelectMany(t => t.PlaylistTracks);
+            
             return View(await db.Tracks.ToListAsync());
         }
 
@@ -28,11 +33,22 @@ namespace Capstone.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Track track = await db.Tracks.FindAsync(id);
+
+            var userGuid = User.Identity.GetUserId();
+            var currentListener = db.Listeners.FirstOrDefault(l => l.UserGuid == userGuid);
+            Track track = await db.Tracks.Include(t => t.Album).Include(t => t.Artist).FirstOrDefaultAsync(t => t.TrackId == id);
+            
             if (track == null)
             {
                 return HttpNotFound();
             }
+
+            if (track.TrackDurationInMs is null)
+            {
+                track = await SpotifyInteractionController.GetSpotifyTrackDetails(currentListener, track);
+                db.SaveChanges();
+            }
+
             return View(track);
         }
 

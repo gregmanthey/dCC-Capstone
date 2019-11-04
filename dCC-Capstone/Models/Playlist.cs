@@ -19,7 +19,18 @@ namespace Capstone.Models
         public string PlaylistName { get; set; }
 
         [Display(Name = "Number of tracks")]
-        public int TrackCount { get => PlaylistTracks.Count; }
+        public int TrackCount
+        {
+            get
+            {
+                if (PlaylistTracks is null)
+                {
+                    return 0;
+                }
+                return PlaylistTracks.Count;
+            }
+        }
+            
 
         [ForeignKey("Mood")]
         [Display(Name = "Playlist Mood")]

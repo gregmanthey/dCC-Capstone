@@ -33,20 +33,41 @@
         <dd>
             @Html.DisplayFor(model => model.Playlist.Mood.MoodName)
         </dd>
-
-        <dt>
-            @Html.DisplayNameFor(model => model.Playlist.PlaylistTracks)
-        </dt>
-
-        @foreach (var track in Model.Playlist.PlaylistTracks)
-        {
-
-            <dt>
-                @Html.DisplayFor(item => track.TrackName)<br /> By: 
-                @Html.DisplayFor(item => track.Artist.ArtistName)
-            </dt>
-        }
     </dl>
+</div>
+<div>
+    <h3>Playlist Tracks</h3>
+    <table class="table table-hover table-dark">
+        <thead>
+            <tr>
+                <th scope="col">Track Title</th>
+                <th scope="col">Artist</th>
+                <th scope="col">Album</th>
+                <th scope="col">Track Details</th>
+                <th scope="col">Track Preview</th>
+            </tr>
+        </thead>
+        <tbody>
+            @{
+                var tracks = Model.Playlist.PlaylistTracks.OrderBy(t => t.TrackName).ToList();
+                for (int i = 0; i < tracks.Count; i++)
+                {
+                    var track = tracks[i];
+                    <tr>
+                        <td><a target="_blank" rel="noopener nofollow noreferrer" href="@Html.DisplayFor(item => track.TrackSpotifyUrl)">@Html.DisplayFor(item => track.TrackName)</a></td>
+                        <td>@Html.DisplayFor(item => track.Artist.ArtistName)</td>
+                        <td>@Html.DisplayFor(item => track.Album.AlbumName)</td>
+                        <td>@Html.ActionLink("Details", "Details", "Tracks", new { id = track.TrackId }, null)</td>
+                        <td>
+                            <audio controls>
+                                <source src="@track.TrackPreviewUrl" type="audio/ogg">
+                            </audio>
+                        </td>
+                    </tr>
+                }
+            }
+        </tbody>
+    </table>
 </div>
 <p>
     @Html.ActionLink("Edit", "Edit", new { id = Model.Playlist.PlaylistId }) |
